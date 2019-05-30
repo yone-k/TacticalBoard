@@ -111,36 +111,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\blue1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blue2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blue3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blue4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\blue5.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red4.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\red5.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.7.2 %28x86 および x64%29</ProductName>
@@ -151,6 +121,36 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\blue5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\red2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
