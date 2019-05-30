@@ -13,8 +13,15 @@
         </Grid.RowDefinitions>
         <InkCanvas x:Name="inkCanvas"
             HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" Grid.Row="1" />
-        <Canvas Margin="1,0,0,0" Grid.Row="1" MinWidth="600" MinHeight="400">
+            VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" Grid.Row="1" EditingMode="Ink">
+            <InkCanvas.Background>
+                <ImageBrush Stretch="Uniform"/>
+            </InkCanvas.Background>
+            <InkCanvas.DefaultDrawingAttributes>
+                <DrawingAttributes FitToCurve="True" Width="3" Height="3" Color="Yellow"/>
+            </InkCanvas.DefaultDrawingAttributes>
+        </InkCanvas>
+        <Canvas x:Name="Peace" Margin="1,0,0,0" Grid.Row="1" MinWidth="600" MinHeight="400">
             <Thumb x:Name="red1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="10" Canvas.Top="10" Width="27">
                 <Thumb.Template>
                     <ControlTemplate>
@@ -86,5 +93,6 @@
                 </Thumb.Template>
             </Thumb>
         </Canvas>
+        <Button x:Name="MAPButton" Content="MAP" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="40" Click="MAPButton_Click"/>
     </Grid>
 </Window>

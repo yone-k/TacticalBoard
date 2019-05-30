@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,5 +74,23 @@ namespace TacticalBoard
                 Canvas.SetTop(thumb, y);
             }
         }
+
+        private void MAPButton_Click(object sender, RoutedEventArgs e)
+        {
+            // ダイアログのインスタンスを生成
+            var dialog = new OpenFileDialog();
+
+            // ファイルの種類を設定
+            dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
+
+            // ダイアログを表示する
+            if (dialog.ShowDialog() == true)
+            {
+                ImageBrush ib = new ImageBrush();
+                ib.ImageSource = new BitmapImage(new Uri(dialog.FileName, UriKind.Relative));
+                ib.Stretch = Stretch.Uniform;
+                inkCanvas.Background = ib;
+            }
         }
+    }
     }
