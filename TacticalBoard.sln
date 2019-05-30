@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TacticalBoard", "TacticalBoard\TacticalBoard.csproj", "{2F9B0EB2-9300-4E8D-99D2-C3208BCEDC7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F9B0EB2-9300-4E8D-99D2-C3208BCEDC7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9B0EB2-9300-4E8D-99D2-C3208BCEDC7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9B0EB2-9300-4E8D-99D2-C3208BCEDC7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9B0EB2-9300-4E8D-99D2-C3208BCEDC7A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E43E528-9B1E-4637-AD7F-C4E90B747339}
+	EndGlobalSection
+EndGlobal
