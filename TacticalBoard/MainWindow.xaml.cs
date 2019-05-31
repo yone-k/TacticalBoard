@@ -24,6 +24,8 @@ namespace TacticalBoard
     {
         bool IsDraw;
         String lineName;
+        List<Thumb> thumbs = new List<Thumb>();
+        private PointCollection thumbDefaultPoints = new PointCollection();
 
         public MainWindow()
         {
@@ -31,6 +33,8 @@ namespace TacticalBoard
             
         }
 
+
+        //Thumbドラッグ開始
         private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             var thumb = sender as Thumb;
@@ -47,6 +51,7 @@ namespace TacticalBoard
             }
         }
 
+        //Thumbドラッグ終了
         private void Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             var thumb = sender as Thumb;
@@ -60,6 +65,7 @@ namespace TacticalBoard
             }
         }
 
+        //Thumbドラッグ中
         private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
         {
             var thumb = sender as Thumb;
@@ -81,7 +87,7 @@ namespace TacticalBoard
                 Canvas.SetTop(thumb, y);
             }
         }
-
+        //背景画像(MAP画像)をファイルから選択
         private void MAPButton_Click(object sender, RoutedEventArgs e)
         {
             // ダイアログのインスタンスを生成
@@ -99,7 +105,7 @@ namespace TacticalBoard
                 inkCanvas.Background = ib;
             }
         }
-
+        //コマから右ドラッグで直線を引くためのメソッド(右クリック押し込み動作)
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
             //inkCanvas.EditingMode = InkCanvasEditingMode.None;
@@ -127,6 +133,7 @@ namespace TacticalBoard
             
         }
 
+        //右クリック押し込んだ状態でのマウス移動
         private void peaceMouseMove(object sender, MouseEventArgs e)
         {
             Line line = Peace.FindName(lineName) as Line;
@@ -139,6 +146,7 @@ namespace TacticalBoard
             }
         }
 
+        //右クリックを離した場合
         private void peaceMouseRightUp(object sender, MouseButtonEventArgs e)
         {
             Line line = Peace.FindName(lineName) as Line;
@@ -149,6 +157,30 @@ namespace TacticalBoard
                 line.X2 = mousePoint.X;
                 line.Y2 = mousePoint.Y;
             }
+        }
+
+        //リセットボタンの動作
+        private void resetButton(object sender, RoutedEventArgs e)
+        {
+            Line line;
+            int i;
+            for(i = 0; i < 10; i++)
+            {
+                Canvas.SetLeft(thumbs[i], thumbDefaultPoints[i].X);
+                Canvas.SetTop(thumbs[i], thumbDefaultPoints[i].Y);
+                lineName = thumbs[i].Name + "Line";
+                line = Peace.FindName(lineName) as Line;
+                line.Visibility = Visibility.Collapsed;
+                inkCanvas.Strokes.Clear();
+
+            }
+        }
+
+        private void thumbLoaded(object sender, RoutedEventArgs e)
+        {
+            var thumb = sender as Thumb;
+            thumbs.Add((Thumb)sender);
+            thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), Peace));
         }
     }
     }
