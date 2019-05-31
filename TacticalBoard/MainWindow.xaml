@@ -12,8 +12,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <InkCanvas x:Name="inkCanvas"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" Grid.Row="1" EditingMode="Ink">
+            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" EditingMode="Ink" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove">
             <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
@@ -21,71 +20,81 @@
                 <DrawingAttributes FitToCurve="True" Width="3" Height="3" Color="Yellow"/>
             </InkCanvas.DefaultDrawingAttributes>
         </InkCanvas>
-        <Canvas x:Name="Peace" Margin="1,0,0,0" Grid.Row="1" MinWidth="600" MinHeight="400">
-            <Thumb x:Name="red1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="10" Canvas.Top="10" Width="27">
+        <Canvas x:Name="Peace" Margin="1,0,0,0" Grid.Row="1" MinWidth="600" MinHeight="400" MouseMove="peaceMouseMove" MouseRightButtonUp="peaceMouseRightUp" OpacityMask="Red">
+            <Line x:Name="red1Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
+            <Line x:Name="red2Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
+            <Line x:Name="red3Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
+            <Line x:Name="red4Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="red5Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="blue1Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="blue2Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="blue3Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="blue4Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
+            <Line x:Name="blue5Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4" />
+            <Thumb x:Name="red1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="10" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/red1.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left" RenderTransformOrigin="1.222,0.463"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="red2" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="42" Canvas.Top="10" Width="27">
+            <Thumb x:Name="red2" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="42" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/red2.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="red3" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="74" Canvas.Top="10" Width="27">
+            <Thumb x:Name="red3" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="74" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/red3.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left" RenderTransformOrigin="1.222,0.463"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="red4" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="106" Canvas.Top="10" Width="27">
+            <Thumb x:Name="red4" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="106" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/red4.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="red5" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="138" Canvas.Top="10" Width="27">
+            <Thumb x:Name="red5" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="138" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/red5.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="blue1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="224" Canvas.Top="10" Width="27">
+            <Thumb x:Name="blue1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="224" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/blue1.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left" RenderTransformOrigin="1.222,0.463"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="blue2" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="256" Canvas.Top="10" Width="27">
+            <Thumb x:Name="blue2" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="256" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/blue2.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="blue3" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="288" Canvas.Top="10" Width="27">
+            <Thumb x:Name="blue3" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="288" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/blue3.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left" RenderTransformOrigin="1.222,0.463"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="blue4" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="320" Canvas.Top="10" Width="27">
+            <Thumb x:Name="blue4" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="320" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/blue4.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>
                     </ControlTemplate>
                 </Thumb.Template>
             </Thumb>
-            <Thumb x:Name="blue5" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="352" Canvas.Top="10" Width="27">
+            <Thumb x:Name="blue5" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="352" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown">
                 <Thumb.Template>
                     <ControlTemplate>
                         <Image Height="27" VerticalAlignment="Top" Width="27" Source="Resources/blue5.png" Grid.Row="1" MinWidth="1" MinHeight="1" HorizontalAlignment="Left"/>

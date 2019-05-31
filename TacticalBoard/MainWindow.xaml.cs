@@ -22,14 +22,21 @@ namespace TacticalBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        bool IsDraw;
+        String lineName;
+
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             var thumb = sender as Thumb;
+            lineName = thumb.Name + "Line";
+            Line line = Peace.FindName(lineName) as Line;
+            line.Visibility = Visibility.Collapsed;
             if (null != thumb)
             {
                 var border = thumb.Template.FindName("Thumb_Border", thumb) as Border;
@@ -90,6 +97,57 @@ namespace TacticalBoard
                 ib.ImageSource = new BitmapImage(new Uri(dialog.FileName, UriKind.Relative));
                 ib.Stretch = Stretch.Uniform;
                 inkCanvas.Background = ib;
+            }
+        }
+
+        private void ThumbRightDown(object sender, MouseButtonEventArgs e)
+        {
+            //inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            var Thumb = sender as Thumb;
+            Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), Peace);
+            Point mousePoint = Mouse.GetPosition(Peace);
+            lineName = Thumb.Name +"Line";
+            Line line = Peace.FindName(lineName) as Line;
+            if ( line != null)
+            {
+                line.X1 = thumbPoint.X + 14;
+                line.Y1 = thumbPoint.Y + 14;
+            }
+            
+            if(IsDraw == true)
+            {
+                IsDraw = false;
+                line.X2 = mousePoint.X;
+                line.Y2 = mousePoint.Y;
+            }
+            else
+            {
+                IsDraw = true;
+            }
+            
+        }
+
+        private void peaceMouseMove(object sender, MouseEventArgs e)
+        {
+            Line line = Peace.FindName(lineName) as Line;
+            if (IsDraw == true)
+            {
+                Point mousePoint = Mouse.GetPosition(Peace);
+                line.X2 = mousePoint.X;
+                line.Y2 = mousePoint.Y;
+                line.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void peaceMouseRightUp(object sender, MouseButtonEventArgs e)
+        {
+            Line line = Peace.FindName(lineName) as Line;
+            Point mousePoint = Mouse.GetPosition(Peace);
+            if (IsDraw == true)
+            {
+                IsDraw = false;
+                line.X2 = mousePoint.X;
+                line.Y2 = mousePoint.Y;
             }
         }
     }
