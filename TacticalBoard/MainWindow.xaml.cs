@@ -109,6 +109,7 @@ namespace TacticalBoard
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
             PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
             var Thumb = sender as Thumb;
             Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), Peace);
@@ -167,6 +168,7 @@ namespace TacticalBoard
             int i;
 
             PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
 
             for (i = 0; i < 10; i++)
@@ -200,15 +202,39 @@ namespace TacticalBoard
 
             if(PenButton.IsChecked == true)
             {
+                EraseButton.IsChecked = false;
                 inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
             }
             else
-            { 
+            {
+                EraseButton.IsChecked = false;
                 inkCanvas.EditingMode = InkCanvasEditingMode.None;
             }
 
         }
 
+        private void EraseChecked(object sender, RoutedEventArgs e)
+        {
+            if (EraseButton == null)
+            {
+                return;
+            }
 
+            if (EraseButton.IsChecked == true)
+            {
+                inkCanvas.EditingMode = InkCanvasEditingMode.EraseByStroke;
+            }
+            else
+            {
+                if (PenButton.IsChecked == true)
+                {
+                    inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+                }
+                else
+                {
+                    inkCanvas.EditingMode = InkCanvasEditingMode.None;
+                }
+            }
+        }
     }
     }
