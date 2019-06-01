@@ -12,7 +12,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <InkCanvas x:Name="inkCanvas"
-            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" EditingMode="Ink" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove">
+            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove">
             <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
@@ -103,6 +103,7 @@
             </Thumb>
         </Canvas>
         <Button x:Name="MAPButton" Content="MAP" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="40" Click="MAPButton_Click"/>
-        <Button x:Name="button" Content="Reset" HorizontalAlignment="Left" Margin="50,5,0,0" VerticalAlignment="Top" Width="39" Click="resetButton"/>
+        <Button x:Name="ResetButton" Content="Reset" HorizontalAlignment="Left" Margin="50,5,0,0" VerticalAlignment="Top" Width="39" Click="resetButton"/>
+        <ToggleButton x:Name="PenButton" Content="Pen" HorizontalAlignment="Left" Margin="89,5,0,0" VerticalAlignment="Top" Width="39" BorderBrush="#FF707070" ClickMode="Press" Click="PenButton_Checked"/>
     </Grid>
 </Window>

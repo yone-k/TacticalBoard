@@ -108,7 +108,8 @@ namespace TacticalBoard
         //コマから右ドラッグで直線を引くためのメソッド(右クリック押し込み動作)
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
-            //inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            PenButton.IsChecked = false;
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
             var Thumb = sender as Thumb;
             Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), Peace);
             Point mousePoint = Mouse.GetPosition(Peace);
@@ -164,8 +165,13 @@ namespace TacticalBoard
         {
             Line line;
             int i;
-            for(i = 0; i < 10; i++)
+
+            PenButton.IsChecked = false;
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+
+            for (i = 0; i < 10; i++)
             {
+
                 Canvas.SetLeft(thumbs[i], thumbDefaultPoints[i].X);
                 Canvas.SetTop(thumbs[i], thumbDefaultPoints[i].Y);
                 lineName = thumbs[i].Name + "Line";
@@ -176,11 +182,33 @@ namespace TacticalBoard
             }
         }
 
+        //Thumbをロードしたらリストに入れて管理しやすくする
         private void thumbLoaded(object sender, RoutedEventArgs e)
         {
             var thumb = sender as Thumb;
             thumbs.Add((Thumb)sender);
             thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), Peace));
         }
+
+
+        private void PenButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if(PenButton == null)
+            {
+                return;
+            }
+
+            if(PenButton.IsChecked == true)
+            {
+                inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
+            }
+            else
+            { 
+                inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            }
+
+        }
+
+
     }
     }
