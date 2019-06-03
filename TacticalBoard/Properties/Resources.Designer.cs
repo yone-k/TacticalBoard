@@ -113,6 +113,16 @@ namespace TacticalBoard.Properties {
         /// <summary>
         ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
         /// </summary>
+        internal static System.Drawing.Bitmap Frag {
+            get {
+                object obj = ResourceManager.GetObject("Frag", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
+        /// </summary>
         internal static System.Drawing.Bitmap red1 {
             get {
                 object obj = ResourceManager.GetObject("red1", resourceCulture);

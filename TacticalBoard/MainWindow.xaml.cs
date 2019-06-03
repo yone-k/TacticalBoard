@@ -22,10 +22,32 @@ namespace TacticalBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        //直線書いてる最中かどうかの判定
         bool IsDraw;
+
+        //現在選択中のコマの直線の名前
         String lineName;
+
+        //コマのリスト
         List<Thumb> thumbs = new List<Thumb>();
+
+        //コマの初期配置座標リスト
         private PointCollection thumbDefaultPoints = new PointCollection();
+
+        //スタンプ押してる最中判定用
+        bool IsStamp;
+
+        //スタンプの判定用(0=frag,1=smoke,2=stan,3=other)
+        int StampType;
+
+        //グレの画像リスト
+        List<Image> fragImages = new List<Image>();
+
+        //グレの画像リストのIndex
+        int fragIndex = 0;
+
+
 
         public MainWindow()
         {
@@ -122,7 +144,7 @@ namespace TacticalBoard
                 line.Y1 = thumbPoint.Y + 14;
             }
             
-            if(IsDraw == true)
+            if(IsDraw)
             {
                 IsDraw = false;
                 line.X2 = mousePoint.X;
@@ -135,25 +157,39 @@ namespace TacticalBoard
             
         }
 
-        //右クリック押し込んだ状態でのマウス移動
+        //キャンバス上のマウス移動関係
         private void peaceMouseMove(object sender, MouseEventArgs e)
         {
+            //直線描画部分
             Line line = Peace.FindName(lineName) as Line;
-            if (IsDraw == true)
+            if (IsDraw)
             {
                 Point mousePoint = Mouse.GetPosition(Peace);
                 line.X2 = mousePoint.X;
                 line.Y2 = mousePoint.Y;
                 line.Visibility = Visibility.Visible;
             }
+
+            //Stamp押す部分
+            if (IsStamp)
+            {
+                switch (StampType)
+                {
+                    case 0:
+                        Point mousePoint = Mouse.GetPosition(Peace);
+                        fragImages[fragIndex-1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+                        break;
+                }
+
+            }
         }
 
-        //右クリックを離した場合
+        //thumbから右クリックを離した場合
         private void peaceMouseRightUp(object sender, MouseButtonEventArgs e)
         {
             Line line = Peace.FindName(lineName) as Line;
             Point mousePoint = Mouse.GetPosition(Peace);
-            if (IsDraw == true)
+            if (IsDraw)
             {
                 IsDraw = false;
                 line.X2 = mousePoint.X;
@@ -192,7 +228,7 @@ namespace TacticalBoard
             thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), Peace));
         }
 
-
+        //ペンモードの切り替え
         private void PenButton_Checked(object sender, RoutedEventArgs e)
         {
             if(PenButton == null)
@@ -213,6 +249,7 @@ namespace TacticalBoard
 
         }
 
+        //消しゴムモードの切替
         private void EraseChecked(object sender, RoutedEventArgs e)
         {
             if (EraseButton == null)
@@ -234,6 +271,34 @@ namespace TacticalBoard
                 {
                     inkCanvas.EditingMode = InkCanvasEditingMode.None;
                 }
+            }
+        }
+
+        //グレスタンプボタン
+        private void fragButton(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            BitmapImage image = new BitmapImage(new Uri("Resources/Frag.png",UriKind.Relative));
+            Image frag = new Image();
+            frag.Source = image;
+            frag.Width = 30;
+            IsStamp = true;
+            fragIndex += 1;
+            StampType = 0;
+            Point mousePoint = Mouse.GetPosition(inkCanvas);
+            frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            inkCanvas.Children.Add(frag);
+            fragImages.Add(frag);
+        }
+
+        //画面上でのクリック時の動作
+        private void peaceMouseClick(object sender, MouseButtonEventArgs e)
+        {
+            //スタンプ押す状態のとき
+            if (IsStamp)
+            {
+                IsStamp = false;
+
             }
         }
     }
