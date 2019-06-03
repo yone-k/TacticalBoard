@@ -48,6 +48,13 @@ namespace TacticalBoard
         int fragIndex = 0;
 
 
+        //煙の画像リスト
+        List<Image> smokeImages = new List<Image>();
+
+        //煙リストのIndex
+        int smokeIndex = 0;
+
+
 
         public MainWindow()
         {
@@ -275,13 +282,13 @@ namespace TacticalBoard
         }
 
         //グレスタンプボタン
-        private void fragButton(object sender, RoutedEventArgs e)
+        private void fragButtonClick(object sender, RoutedEventArgs e)
         {
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
-            BitmapImage image = new BitmapImage(new Uri("Resources/Frag.png",UriKind.Relative));
+            BitmapImage image = new BitmapImage(new Uri("Resources/frag.png",UriKind.Relative));
             Image frag = new Image();
             frag.Source = image;
-            frag.Width = 30;
+            frag.Width = 50;
             IsStamp = true;
             fragIndex += 1;
             StampType = 0;
@@ -300,6 +307,22 @@ namespace TacticalBoard
                 IsStamp = false;
 
             }
+        }
+
+        private void smokeButtonClick(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            BitmapImage image = new BitmapImage(new Uri("Resources/Frag.png", UriKind.Relative));
+            Image frag = new Image();
+            frag.Source = image;
+            frag.Width = 30;
+            IsStamp = true;
+            fragIndex += 1;
+            StampType = 0;
+            Point mousePoint = Mouse.GetPosition(inkCanvas);
+            frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            inkCanvas.Children.Add(frag);
+            fragImages.Add(frag);
         }
     }
     }

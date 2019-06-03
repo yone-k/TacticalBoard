@@ -108,6 +108,7 @@
         <Button x:Name="ResetButton" Content="Reset" HorizontalAlignment="Left" Margin="50,5,0,0" VerticalAlignment="Top" Width="39" Click="resetButton"/>
         <ToggleButton x:Name="PenButton" Content="Pen" HorizontalAlignment="Left" Margin="89,5,0,0" VerticalAlignment="Top" Width="39" BorderBrush="#FF707070" ClickMode="Press" Click="PenButton_Checked"/>
         <ToggleButton x:Name="EraseButton" Content="Erase" HorizontalAlignment="Left" Margin="128,5,0,0" VerticalAlignment="Top" Width="39" Click="EraseChecked"/>
-        <Button x:Name="button" Content="Frag" HorizontalAlignment="Left" Margin="167,5,0,0" VerticalAlignment="Top" Width="39" Click="fragButton"/>
+        <Button x:Name="FragButton" Content="Frag" HorizontalAlignment="Left" Margin="167,5,0,0" VerticalAlignment="Top" Width="39" Click="fragButtonClick"/>
+        <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="206,5,0,0" VerticalAlignment="Top" Width="39" Click="smokeButtonClick"/>
     </Grid>
 </Window>
