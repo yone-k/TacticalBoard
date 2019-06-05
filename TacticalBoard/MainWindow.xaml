@@ -21,7 +21,7 @@
             </InkCanvas.DefaultDrawingAttributes>
         </InkCanvas>
 
-        <Canvas x:Name="Peace" Margin="1,0,0,0" Grid.Row="1" MinWidth="600" MinHeight="400" MouseMove="peaceMouseMove" MouseRightButtonUp="peaceMouseRightUp" OpacityMask="Red">
+        <Canvas x:Name="Peace" Margin="0" Grid.Row="1" MinWidth="600" MinHeight="400" MouseMove="peaceMouseMove" MouseRightButtonUp="peaceMouseRightUp" OpacityMask="Red">
             <Line x:Name="red1Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
             <Line x:Name="red2Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
             <Line x:Name="red3Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
@@ -110,5 +110,6 @@
         <ToggleButton x:Name="EraseButton" Content="Erase" HorizontalAlignment="Left" Margin="128,5,0,0" VerticalAlignment="Top" Width="39" Click="EraseChecked"/>
         <Button x:Name="FragButton" Content="Frag" HorizontalAlignment="Left" Margin="167,5,0,0" VerticalAlignment="Top" Width="39" Click="fragButtonClick"/>
         <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="206,5,0,0" VerticalAlignment="Top" Width="39" Click="smokeButtonClick"/>
+        <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="245,5,0,0" VerticalAlignment="Top" Width="39" Click="stunButtonClick"/>
     </Grid>
 </Window>

@@ -47,14 +47,17 @@ namespace TacticalBoard
         //グレの画像リストのIndex
         int fragIndex = 0;
 
-
         //煙の画像リスト
         List<Image> smokeImages = new List<Image>();
 
         //煙リストのIndex
         int smokeIndex = 0;
 
+        //スタンの画像リスト
+        List<Image> stunImages = new List<Image>();
 
+        //スタンリストのIndex
+        int stunIndex = 0;
 
         public MainWindow()
         {
@@ -191,6 +194,10 @@ namespace TacticalBoard
                     case 1:
                         smokeImages[smokeIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
                         break;
+
+                    case 2:
+                        stunImages[stunIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+                        break;
                 }
 
             }
@@ -245,6 +252,13 @@ namespace TacticalBoard
                 smokeImages[smokeIndex - 1].Visibility = Visibility.Collapsed;
             }
             smokeImages.Clear();
+
+            //スタンスタンプのリセット
+            for (; stunIndex > 0; stunIndex--)
+            {
+                stunImages[stunIndex - 1].Visibility = Visibility.Collapsed;
+            }
+            stunImages.Clear();
         }
 
         //Thumbをロードしたらリストに入れて管理しやすくする
@@ -346,6 +360,23 @@ namespace TacticalBoard
             smoke.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
             inkCanvas.Children.Add(smoke);
             smokeImages.Add(smoke);
+        }
+
+        //スタンスタンプボタン
+        private void stunButtonClick(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            BitmapImage image = new BitmapImage(new Uri("Resources/stun.png", UriKind.Relative));
+            Image stun = new Image();
+            stun.Source = image;
+            stun.Width = 50;
+            IsStamp = true;
+            stunIndex++;
+            StampType = 2;
+            Point mousePoint = Mouse.GetPosition(inkCanvas);
+            stun.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            inkCanvas.Children.Add(stun);
+            stunImages.Add(stun);
         }
     }
     }
