@@ -167,11 +167,12 @@ namespace TacticalBoard
         //キャンバス上のマウス移動関係
         private void peaceMouseMove(object sender, MouseEventArgs e)
         {
+            Point mousePoint = Mouse.GetPosition(Peace);
             //直線描画部分
             Line line = Peace.FindName(lineName) as Line;
             if (IsDraw)
             {
-                Point mousePoint = Mouse.GetPosition(Peace);
+
                 line.X2 = mousePoint.X;
                 line.Y2 = mousePoint.Y;
                 line.Visibility = Visibility.Visible;
@@ -180,11 +181,15 @@ namespace TacticalBoard
             //Stamp押す部分
             if (IsStamp)
             {
-                switch (StampType)
+                 switch (StampType)
                 {
                     case 0:
-                        Point mousePoint = Mouse.GetPosition(Peace);
+                        
                         fragImages[fragIndex-1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+                        break;
+
+                    case 1:
+                        smokeImages[smokeIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
                         break;
                 }
 
@@ -210,13 +215,14 @@ namespace TacticalBoard
             Line line;
             int i;
 
+            //ボタン周りのリセット
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
 
+            //インクのリセット
             for (i = 0; i < 10; i++)
             {
-
                 Canvas.SetLeft(thumbs[i], thumbDefaultPoints[i].X);
                 Canvas.SetTop(thumbs[i], thumbDefaultPoints[i].Y);
                 lineName = thumbs[i].Name + "Line";
@@ -225,6 +231,20 @@ namespace TacticalBoard
                 inkCanvas.Strokes.Clear();
 
             }
+
+            //グレスタンプのリセット
+            for(;fragIndex>0; fragIndex--)
+            {
+                fragImages[fragIndex-1].Visibility = Visibility.Collapsed;
+            }
+            fragImages.Clear();
+
+            //スモークスタンプのリセット
+            for (; smokeIndex > 0; smokeIndex--)
+            {
+                smokeImages[smokeIndex - 1].Visibility = Visibility.Collapsed;
+            }
+            smokeImages.Clear();
         }
 
         //Thumbをロードしたらリストに入れて管理しやすくする
@@ -281,22 +301,7 @@ namespace TacticalBoard
             }
         }
 
-        //グレスタンプボタン
-        private void fragButtonClick(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.EditingMode = InkCanvasEditingMode.None;
-            BitmapImage image = new BitmapImage(new Uri("Resources/frag.png",UriKind.Relative));
-            Image frag = new Image();
-            frag.Source = image;
-            frag.Width = 50;
-            IsStamp = true;
-            fragIndex += 1;
-            StampType = 0;
-            Point mousePoint = Mouse.GetPosition(inkCanvas);
-            frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-            inkCanvas.Children.Add(frag);
-            fragImages.Add(frag);
-        }
+
 
         //画面上でのクリック時の動作
         private void peaceMouseClick(object sender, MouseButtonEventArgs e)
@@ -309,20 +314,38 @@ namespace TacticalBoard
             }
         }
 
-        private void smokeButtonClick(object sender, RoutedEventArgs e)
+        //グレスタンプボタン
+        private void fragButtonClick(object sender, RoutedEventArgs e)
         {
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
-            BitmapImage image = new BitmapImage(new Uri("Resources/Frag.png", UriKind.Relative));
+            BitmapImage image = new BitmapImage(new Uri("Resources/frag.png", UriKind.Relative));
             Image frag = new Image();
             frag.Source = image;
-            frag.Width = 30;
+            frag.Width = 50;
             IsStamp = true;
-            fragIndex += 1;
+            fragIndex++;
             StampType = 0;
             Point mousePoint = Mouse.GetPosition(inkCanvas);
             frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
             inkCanvas.Children.Add(frag);
             fragImages.Add(frag);
+        }
+
+        //スモークスタンプボタン
+        private void smokeButtonClick(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.EditingMode = InkCanvasEditingMode.None;
+            BitmapImage image = new BitmapImage(new Uri("Resources/smoke.png", UriKind.Relative));
+            Image smoke = new Image();
+            smoke.Source = image;
+            smoke.Width = 50;
+            IsStamp = true;
+            smokeIndex ++;
+            StampType = 1;
+            Point mousePoint = Mouse.GetPosition(inkCanvas);
+            smoke.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            inkCanvas.Children.Add(smoke);
+            smokeImages.Add(smoke);
         }
     }
     }
