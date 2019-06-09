@@ -59,6 +59,12 @@ namespace TacticalBoard
         //スタンリストのIndex
         int stunIndex = 0;
 
+        //その他スタンプのリスト
+        List<Image> stampImages = new List<Image>();
+
+        //その他スタンプリストのIndex
+        int stampIndex = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -71,7 +77,7 @@ namespace TacticalBoard
         {
             var thumb = sender as Thumb;
             lineName = thumb.Name + "Line";
-            Line line = Peace.FindName(lineName) as Line;
+            Line line = PeaceCanvas.FindName(lineName) as Line;
             line.Visibility = Visibility.Collapsed;
             if (null != thumb)
             {
@@ -119,6 +125,7 @@ namespace TacticalBoard
                 Canvas.SetTop(thumb, y);
             }
         }
+
         //背景画像(MAP画像)をファイルから選択
         private void MAPButton_Click(object sender, RoutedEventArgs e)
         {
@@ -137,6 +144,7 @@ namespace TacticalBoard
                 inkCanvas.Background = ib;
             }
         }
+        
         //コマから右ドラッグで直線を引くためのメソッド(右クリック押し込み動作)
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
@@ -144,10 +152,10 @@ namespace TacticalBoard
             EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
             var Thumb = sender as Thumb;
-            Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), Peace);
-            Point mousePoint = Mouse.GetPosition(Peace);
+            Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), PeaceCanvas);
+            Point mousePoint = Mouse.GetPosition(PeaceCanvas);
             lineName = Thumb.Name +"Line";
-            Line line = Peace.FindName(lineName) as Line;
+            Line line = PeaceCanvas.FindName(lineName) as Line;
             if ( line != null)
             {
                 line.X1 = thumbPoint.X + 14;
@@ -170,9 +178,9 @@ namespace TacticalBoard
         //キャンバス上のマウス移動関係
         private void peaceMouseMove(object sender, MouseEventArgs e)
         {
-            Point mousePoint = Mouse.GetPosition(Peace);
+            Point mousePoint = Mouse.GetPosition(PeaceCanvas);
             //直線描画部分
-            Line line = Peace.FindName(lineName) as Line;
+            Line line = PeaceCanvas.FindName(lineName) as Line;
             if (IsDraw)
             {
 
@@ -198,6 +206,10 @@ namespace TacticalBoard
                     case 2:
                         stunImages[stunIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
                         break;
+
+                    case 3:
+                        stampImages[stampIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+                        break;
                 }
 
             }
@@ -206,8 +218,8 @@ namespace TacticalBoard
         //thumbから右クリックを離した場合
         private void peaceMouseRightUp(object sender, MouseButtonEventArgs e)
         {
-            Line line = Peace.FindName(lineName) as Line;
-            Point mousePoint = Mouse.GetPosition(Peace);
+            Line line = PeaceCanvas.FindName(lineName) as Line;
+            Point mousePoint = Mouse.GetPosition(PeaceCanvas);
             if (IsDraw)
             {
                 IsDraw = false;
@@ -233,7 +245,7 @@ namespace TacticalBoard
                 Canvas.SetLeft(thumbs[i], thumbDefaultPoints[i].X);
                 Canvas.SetTop(thumbs[i], thumbDefaultPoints[i].Y);
                 lineName = thumbs[i].Name + "Line";
-                line = Peace.FindName(lineName) as Line;
+                line = PeaceCanvas.FindName(lineName) as Line;
                 line.Visibility = Visibility.Collapsed;
                 inkCanvas.Strokes.Clear();
 
@@ -266,7 +278,7 @@ namespace TacticalBoard
         {
             var thumb = sender as Thumb;
             thumbs.Add((Thumb)sender);
-            thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), Peace));
+            thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), PeaceCanvas));
         }
 
         //ペンモードの切り替え
@@ -315,8 +327,6 @@ namespace TacticalBoard
             }
         }
 
-
-
         //画面上でのクリック時の動作
         private void peaceMouseClick(object sender, MouseButtonEventArgs e)
         {
@@ -331,7 +341,12 @@ namespace TacticalBoard
         //グレスタンプボタン
         private void fragButtonClick(object sender, RoutedEventArgs e)
         {
+            //ペン関係をオフにする
+            PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
+
+            //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/frag.png", UriKind.Relative));
             Image frag = new Image();
             frag.Source = image;
@@ -339,16 +354,28 @@ namespace TacticalBoard
             IsStamp = true;
             fragIndex++;
             StampType = 0;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            frag.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
             Point mousePoint = Mouse.GetPosition(inkCanvas);
+
+            //マウスカーソルの位置に画像をセットする
             frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-            inkCanvas.Children.Add(frag);
+
+            //スタンプを配置
+            StampCanvas.Children.Add(frag);
             fragImages.Add(frag);
         }
 
         //スモークスタンプボタン
         private void smokeButtonClick(object sender, RoutedEventArgs e)
         {
+            //ペン関係をオフにする
+            PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
+
+            //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/smoke.png", UriKind.Relative));
             Image smoke = new Image();
             smoke.Source = image;
@@ -356,16 +383,28 @@ namespace TacticalBoard
             IsStamp = true;
             smokeIndex ++;
             StampType = 1;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            smoke.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
             Point mousePoint = Mouse.GetPosition(inkCanvas);
+
+            //マウスカーソルの位置に画像をセットする
             smoke.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-            inkCanvas.Children.Add(smoke);
+
+            //スタンプを配置
+            StampCanvas.Children.Add(smoke);
             smokeImages.Add(smoke);
         }
 
         //スタンスタンプボタン
         private void stunButtonClick(object sender, RoutedEventArgs e)
         {
+            //ペン関係をオフにする
+            PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             inkCanvas.EditingMode = InkCanvasEditingMode.None;
+
+            //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/stun.png", UriKind.Relative));
             Image stun = new Image();
             stun.Source = image;
@@ -373,10 +412,56 @@ namespace TacticalBoard
             IsStamp = true;
             stunIndex++;
             StampType = 2;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            stun.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
             Point mousePoint = Mouse.GetPosition(inkCanvas);
+
+            //マウスカーソルの位置に画像をセットする
             stun.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-            inkCanvas.Children.Add(stun);
+
+            //スタンプを配置
+            StampCanvas.Children.Add(stun);
             stunImages.Add(stun);
+        }
+
+        //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
+        private void StampClear(object sender, RoutedEventArgs e)
+        {
+            var Stamp = sender as Image;
+            Stamp.Visibility = Visibility.Collapsed;
+        }
+
+        //その他スタンプボタン
+        private void stampButtonClick(object sender, RoutedEventArgs e)
+        {
+            // ダイアログのインスタンスを生成
+            var dialog = new OpenFileDialog();
+
+            // ファイルの種類を設定
+            dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
+
+            // ダイアログを表示する
+            if (dialog.ShowDialog() == true)
+            {
+                Image stamp = new Image();
+                stamp.Source = new BitmapImage(new Uri(dialog.FileName, UriKind.Absolute));
+                stamp.Width = 50;
+                IsStamp = true;
+                stampIndex++;
+                StampType = 3;
+
+                //右クリックで削除できるようにイベントハンドラを用意する
+                stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
+                Point mousePoint = Mouse.GetPosition(inkCanvas);
+
+                //マウスカーソルの位置に画像をセットする
+                stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+
+                //スタンプを配置
+                StampCanvas.Children.Add(stamp);
+                stampImages.Add(stamp);
+            }
         }
     }
     }
