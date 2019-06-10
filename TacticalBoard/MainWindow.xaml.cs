@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,37 +38,16 @@ namespace TacticalBoard
         //スタンプ押してる最中判定用
         bool IsStamp;
 
-        //スタンプの判定用(0=frag,1=smoke,2=stan,3=other)
-        int StampType;
-
-        //グレの画像リスト
-        List<Image> fragImages = new List<Image>();
-
-        //グレの画像リストのIndex
-        int fragIndex = 0;
-
-        //煙の画像リスト
-        List<Image> smokeImages = new List<Image>();
-
-        //煙リストのIndex
-        int smokeIndex = 0;
-
-        //スタンの画像リスト
-        List<Image> stunImages = new List<Image>();
-
-        //スタンリストのIndex
-        int stunIndex = 0;
-
-        //その他スタンプのリスト
+        //スタンプのリスト
         List<Image> stampImages = new List<Image>();
 
-        //その他スタンプリストのIndex
+        //スタンプリストのIndex
         int stampIndex = 0;
 
         public MainWindow()
         {
             InitializeComponent();
-            
+
         }
 
 
@@ -144,7 +123,7 @@ namespace TacticalBoard
                 inkCanvas.Background = ib;
             }
         }
-        
+
         //コマから右ドラッグで直線を引くためのメソッド(右クリック押し込み動作)
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
@@ -154,15 +133,15 @@ namespace TacticalBoard
             var Thumb = sender as Thumb;
             Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), PeaceCanvas);
             Point mousePoint = Mouse.GetPosition(PeaceCanvas);
-            lineName = Thumb.Name +"Line";
+            lineName = Thumb.Name + "Line";
             Line line = PeaceCanvas.FindName(lineName) as Line;
-            if ( line != null)
+            if (line != null)
             {
                 line.X1 = thumbPoint.X + 14;
                 line.Y1 = thumbPoint.Y + 14;
             }
-            
-            if(IsDraw)
+
+            if (IsDraw)
             {
                 IsDraw = false;
                 line.X2 = mousePoint.X;
@@ -172,7 +151,7 @@ namespace TacticalBoard
             {
                 IsDraw = true;
             }
-            
+
         }
 
         //キャンバス上のマウス移動関係
@@ -192,26 +171,7 @@ namespace TacticalBoard
             //Stamp押す部分
             if (IsStamp)
             {
-                 switch (StampType)
-                {
-                    case 0:
-                        
-                        fragImages[fragIndex-1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-                        break;
-
-                    case 1:
-                        smokeImages[smokeIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-                        break;
-
-                    case 2:
-                        stunImages[stunIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-                        break;
-
-                    case 3:
-                        stampImages[stampIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-                        break;
-                }
-
+                stampImages[stampIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
             }
         }
 
@@ -251,26 +211,12 @@ namespace TacticalBoard
 
             }
 
-            //グレスタンプのリセット
-            for(;fragIndex>0; fragIndex--)
+            //スタンプのリセット
+            for (; stampIndex > 0; stampIndex--)
             {
-                fragImages[fragIndex-1].Visibility = Visibility.Collapsed;
+                stampImages[stampIndex - 1].Visibility = Visibility.Collapsed;
             }
-            fragImages.Clear();
-
-            //スモークスタンプのリセット
-            for (; smokeIndex > 0; smokeIndex--)
-            {
-                smokeImages[smokeIndex - 1].Visibility = Visibility.Collapsed;
-            }
-            smokeImages.Clear();
-
-            //スタンスタンプのリセット
-            for (; stunIndex > 0; stunIndex--)
-            {
-                stunImages[stunIndex - 1].Visibility = Visibility.Collapsed;
-            }
-            stunImages.Clear();
+            stampImages.Clear();
         }
 
         //Thumbをロードしたらリストに入れて管理しやすくする
@@ -284,12 +230,12 @@ namespace TacticalBoard
         //ペンモードの切り替え
         private void PenButton_Checked(object sender, RoutedEventArgs e)
         {
-            if(PenButton == null)
+            if (PenButton == null)
             {
                 return;
             }
 
-            if(PenButton.IsChecked == true)
+            if (PenButton.IsChecked == true)
             {
                 EraseButton.IsChecked = false;
                 inkCanvas.EditingMode = InkCanvasEditingMode.Ink;
@@ -352,8 +298,7 @@ namespace TacticalBoard
             frag.Source = image;
             frag.Width = 50;
             IsStamp = true;
-            fragIndex++;
-            StampType = 0;
+            stampIndex++;
 
             //右クリックで削除できるようにイベントハンドラを用意する
             frag.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
@@ -364,7 +309,7 @@ namespace TacticalBoard
 
             //スタンプを配置
             StampCanvas.Children.Add(frag);
-            fragImages.Add(frag);
+            stampImages.Add(frag);
         }
 
         //スモークスタンプボタン
@@ -381,8 +326,7 @@ namespace TacticalBoard
             smoke.Source = image;
             smoke.Width = 50;
             IsStamp = true;
-            smokeIndex ++;
-            StampType = 1;
+            stampIndex++;
 
             //右クリックで削除できるようにイベントハンドラを用意する
             smoke.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
@@ -393,7 +337,7 @@ namespace TacticalBoard
 
             //スタンプを配置
             StampCanvas.Children.Add(smoke);
-            smokeImages.Add(smoke);
+            stampImages.Add(smoke);
         }
 
         //スタンスタンプボタン
@@ -410,8 +354,7 @@ namespace TacticalBoard
             stun.Source = image;
             stun.Width = 50;
             IsStamp = true;
-            stunIndex++;
-            StampType = 2;
+            stampIndex++;
 
             //右クリックで削除できるようにイベントハンドラを用意する
             stun.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
@@ -422,7 +365,7 @@ namespace TacticalBoard
 
             //スタンプを配置
             StampCanvas.Children.Add(stun);
-            stunImages.Add(stun);
+            stampImages.Add(stun);
         }
 
         //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
@@ -449,8 +392,7 @@ namespace TacticalBoard
                 stamp.Width = 50;
                 IsStamp = true;
                 stampIndex++;
-                StampType = 3;
-
+                
                 //右クリックで削除できるようにイベントハンドラを用意する
                 stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
                 Point mousePoint = Mouse.GetPosition(inkCanvas);
@@ -464,4 +406,4 @@ namespace TacticalBoard
             }
         }
     }
-    }
+}
