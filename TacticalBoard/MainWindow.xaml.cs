@@ -425,13 +425,6 @@ namespace TacticalBoard
             stunImages.Add(stun);
         }
 
-        //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
-        private void StampClear(object sender, RoutedEventArgs e)
-        {
-            var Stamp = sender as Image;
-            Stamp.Visibility = Visibility.Collapsed;
-        }
-
         //その他スタンプボタン
         private void stampButtonClick(object sender, RoutedEventArgs e)
         {
@@ -463,5 +456,13 @@ namespace TacticalBoard
                 stampImages.Add(stamp);
             }
         }
+
+        //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
+        private void StampClear(object sender, RoutedEventArgs e)
+        {
+            var Stamp = sender as Image;
+            Stamp.Visibility = Visibility.Collapsed;
+        }
+
     }
-    }
+}
