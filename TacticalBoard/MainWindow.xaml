@@ -53,16 +53,16 @@
         <Canvas x:Name="StampCanvasLayer4" Margin="0" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" MouseRightButtonUp="peaceMouseRightUp" Grid.Row="1" Visibility="Collapsed"/>
 
         <Canvas x:Name="PeaceCanvas" Margin="0" Grid.Row="1" MinWidth="600" MinHeight="400" MouseMove="peaceMouseMove" MouseRightButtonUp="peaceMouseRightUp" OpacityMask="Red">
-            <Line x:Name="red1Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
-            <Line x:Name="red2Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
-            <Line x:Name="red3Line" Stroke="Yellow" StrokeThickness="4" Fill="#FFF4F4F5"/>
-            <Line x:Name="red4Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="red5Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="blue1Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="blue2Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="blue3Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="blue4Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4"/>
-            <Line x:Name="blue5Line" Fill="#FFF4F4F5" Stroke="Yellow" StrokeThickness="4" />
+            <Line x:Name="red1Line" StrokeThickness="4" Fill="#FFF4F4F5" Stroke="Red"/>
+            <Line x:Name="red2Line" Stroke="Red" StrokeThickness="4" Fill="#FFF4F4F5"/>
+            <Line x:Name="red3Line" Stroke="Red" StrokeThickness="4" Fill="#FFF4F4F5"/>
+            <Line x:Name="red4Line" Fill="#FFF4F4F5" Stroke="Red" StrokeThickness="4"/>
+            <Line x:Name="red5Line" Fill="#FFF4F4F5" Stroke="Red" StrokeThickness="4"/>
+            <Line x:Name="blue1Line" Fill="#FFF4F4F5" Stroke="Blue" StrokeThickness="4"/>
+            <Line x:Name="blue2Line" Fill="#FFF4F4F5" Stroke="Blue" StrokeThickness="4"/>
+            <Line x:Name="blue3Line" Fill="#FFF4F4F5" Stroke="Blue" StrokeThickness="4"/>
+            <Line x:Name="blue4Line" Fill="#FFF4F4F5" Stroke="Blue" StrokeThickness="4"/>
+            <Line x:Name="blue5Line" Fill="#FFF4F4F5" Stroke="Blue" StrokeThickness="4" />
             <Thumb x:Name="red1" DragStarted="Thumb_DragStarted" DragCompleted="Thumb_DragCompleted" DragDelta="Thumb_DragDelta" VerticalAlignment="Top" Height="27" Canvas.Left="10" Canvas.Top="10" Width="27" MouseRightButtonDown="ThumbRightDown" Loaded="thumbLoaded">
                 <Thumb.Template>
                     <ControlTemplate>
@@ -138,13 +138,20 @@
         <Button x:Name="ResetButton" Content="Reset" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Width="39" Click="resetButton"/>
         <ToggleButton x:Name="PenButton" Content="Pen" HorizontalAlignment="Left" Margin="98,5,0,0" VerticalAlignment="Top" Width="40" BorderBrush="#FF707070" ClickMode="Press" Click="PenButton_Checked"/>
         <ToggleButton x:Name="EraseButton" Content="Erase" HorizontalAlignment="Left" Margin="138,5,0,0" VerticalAlignment="Top" Width="38" Click="EraseChecked"/>
-        <Button x:Name="FragButton" Content="Frag" HorizontalAlignment="Left" Margin="180,5,0,0" VerticalAlignment="Top" Width="40" Click="fragButtonClick"/>
-        <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="220,5,0,0" VerticalAlignment="Top" Width="38" Click="smokeButtonClick"/>
-        <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="258,5,0,0" VerticalAlignment="Top" Width="40" Click="stunButtonClick"/>
-        <Button x:Name="StampButton" Content="Stamp" HorizontalAlignment="Left" Margin="298,5,0,0" VerticalAlignment="Top" Width="38" Click="stampButtonClick"/>
-        <Button x:Name="Layer1Button" Content="Layer1" HorizontalAlignment="Left" Margin="345,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick" IsEnabled="False"/>
-        <Button x:Name="Layer2Button" Content="Layer2" HorizontalAlignment="Left" Margin="383,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
-        <Button x:Name="Layer3Button" Content="Layer3" HorizontalAlignment="Left" Margin="421,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
-        <Button x:Name="Layer4Button" Content="Layer4" HorizontalAlignment="Left" Margin="459,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
+        <Button x:Name="FragButton" Content="Frag" HorizontalAlignment="Left" Margin="360,5,0,0" VerticalAlignment="Top" Width="40" Click="fragButtonClick"/>
+        <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="400,5,0,0" VerticalAlignment="Top" Width="38" Click="smokeButtonClick"/>
+        <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="438,5,0,0" VerticalAlignment="Top" Width="40" Click="stunButtonClick"/>
+        <Button x:Name="StampButton" Content="Stamp" HorizontalAlignment="Left" Margin="478,5,0,0" VerticalAlignment="Top" Width="38" Click="stampButtonClick"/>
+        <Button x:Name="Layer1Button" Content="Layer1" HorizontalAlignment="Left" Margin="525,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick" IsEnabled="False"/>
+        <Button x:Name="Layer2Button" Content="Layer2" HorizontalAlignment="Left" Margin="563,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
+        <Button x:Name="Layer3Button" Content="Layer3" HorizontalAlignment="Left" Margin="601,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
+        <Button x:Name="Layer4Button" Content="Layer4" HorizontalAlignment="Left" Margin="639,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
+        <Button x:Name="YellowInk" Content="" HorizontalAlignment="Left" Margin="180,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="Black" Background="Yellow" Click="ColorButton" />
+        <Button x:Name="GreenInk" Content="" HorizontalAlignment="Left" Margin="200,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray"  Background="Lime" Click="ColorButton"/>
+        <Button x:Name="CyanInk" Content="" HorizontalAlignment="Left" Margin="220,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Cyan" Click="ColorButton"/>
+        <Button x:Name="PurpleInk" Content="" HorizontalAlignment="Left" Margin="240,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Magenta" Click="ColorButton"/>
+        <Button x:Name="OrangeInk" Content="" HorizontalAlignment="Left" Margin="260,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Orange" Click="ColorButton"/>
+        <Button x:Name="WhiteInk" Content="" HorizontalAlignment="Left" Margin="280,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="White" Click="ColorButton"/>
+        <Button x:Name="BlackInk" Content="" HorizontalAlignment="Left" Margin="300,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Black" Click="ColorButton"/>
     </Grid>
 </Window>
