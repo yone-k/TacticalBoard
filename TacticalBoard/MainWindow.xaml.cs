@@ -300,6 +300,29 @@ namespace TacticalBoard
             }
         }
 
+        //スタンプ押下用メソッド
+        private void PressStamp(String StampType)
+        {
+            Image stamp = new Image
+            {
+                Source = new BitmapImage(new Uri(StampType, UriKind.RelativeOrAbsolute)),
+                Width = 50
+            };
+            IsStamp = true;
+            stampIndex++;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
+
+            //マウスカーソルの位置に画像をセットする
+            stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+
+            //スタンプを配置
+            nowLayerStamp.Children.Add(stamp);
+            stampImages.Add(stamp);
+        }
+
         //グレスタンプボタン
         private void fragButtonClick(object sender, RoutedEventArgs e)
         {
@@ -308,24 +331,8 @@ namespace TacticalBoard
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
-            //元画像読み込み
-            BitmapImage image = new BitmapImage(new Uri("Resources/frag.png", UriKind.Relative));
-            Image frag = new Image();
-            frag.Source = image;
-            frag.Width = 50;
-            IsStamp = true;
-            stampIndex++;
-
-            //右クリックで削除できるようにイベントハンドラを用意する
-            frag.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(nowLayerInk);
-
-            //マウスカーソルの位置に画像をセットする
-            frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-
-            //スタンプを配置
-            nowLayerStamp.Children.Add(frag);
-            stampImages.Add(frag);
+            //スタンプ押下メソッドを呼び出す
+            PressStamp("Resources/frag.png");
         }
 
         //スモークスタンプボタン
@@ -336,24 +343,8 @@ namespace TacticalBoard
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
-            //元画像読み込み
-            BitmapImage image = new BitmapImage(new Uri("Resources/smoke.png", UriKind.Relative));
-            Image smoke = new Image();
-            smoke.Source = image;
-            smoke.Width = 50;
-            IsStamp = true;
-            stampIndex++;
-
-            //右クリックで削除できるようにイベントハンドラを用意する
-            smoke.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(nowLayerInk);
-
-            //マウスカーソルの位置に画像をセットする
-            smoke.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-
-            //スタンプを配置
-            nowLayerStamp.Children.Add(smoke);
-            stampImages.Add(smoke);
+            //スタンプ押下メソッドを呼び出す。
+            PressStamp("Resources/smoke.png");
         }
 
         //スタンスタンプボタン
@@ -364,24 +355,8 @@ namespace TacticalBoard
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
-            //元画像読み込み
-            BitmapImage image = new BitmapImage(new Uri("Resources/stun.png", UriKind.Relative));
-            Image stun = new Image();
-            stun.Source = image;
-            stun.Width = 50;
-            IsStamp = true;
-            stampIndex++;
-
-            //右クリックで削除できるようにイベントハンドラを用意する
-            stun.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(nowLayerInk);
-
-            //マウスカーソルの位置に画像をセットする
-            stun.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-
-            //スタンプを配置
-            nowLayerStamp.Children.Add(stun);
-            stampImages.Add(stun);
+            //スタンプ押下メソッドを呼び出す。
+            PressStamp("Resources/stun.png");
         }
 
         //その他スタンプボタン
@@ -396,25 +371,10 @@ namespace TacticalBoard
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
             {
-                Image stamp = new Image();
-                stamp.Source = new BitmapImage(new Uri(dialog.FileName, UriKind.Absolute));
-                stamp.Width = 50;
-                IsStamp = true;
-                stampIndex++;
-                
-                //右クリックで削除できるようにイベントハンドラを用意する
-                stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-                Point mousePoint = Mouse.GetPosition(nowLayerInk);
-
-                //マウスカーソルの位置に画像をセットする
-                stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-
-                //スタンプを配置
-                nowLayerStamp.Children.Add(stamp);
-                stampImages.Add(stamp);
+                //ダイアログから選択された画像でスタンプを押下する。
+                PressStamp(dialog.FileName);
             }
         }
-
 
         //レイヤー関連
         private void layerButtonClick(object sender, RoutedEventArgs e)
@@ -448,6 +408,5 @@ namespace TacticalBoard
             var Stamp = sender as Image;
             Stamp.Visibility = Visibility.Collapsed;
         }
-
     }
 }
