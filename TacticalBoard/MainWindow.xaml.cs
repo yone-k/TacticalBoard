@@ -1,18 +1,12 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace TacticalBoard
@@ -53,16 +47,22 @@ namespace TacticalBoard
         //現在のレイヤー
         String nowLayer = "Layer1";
 
+        //現在のインク色
+        Button nowInkButton;
+
 
         public MainWindow()
         {
             InitializeComponent();
 
-            nowLayerInk = FindName("inkCanvasLayer1") as InkCanvas;
-            nowLayerStamp = FindName("StampCanvasLayer1") as Canvas;
+            nowLayerInk = inkCanvasLayer1;
+            nowLayerStamp = StampCanvasLayer1;
+            nowInkButton = YellowInk;
+
             thumbsLayer = new string[]{
                 "Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1"
             };
+
         }
 
 
@@ -73,11 +73,12 @@ namespace TacticalBoard
             lineName = thumb.Name + "Line";
             int i;
 
+            //直線を消す
             Line line = PeaceCanvas.FindName(lineName) as Line;
             line.Visibility = Visibility.Collapsed;
 
             //透過設定
-            for (i = 0; i <10; i++)
+            for (i = 0; i < 10; i++)
             {
                 if (thumbs[i].Equals(thumb))
                 {
@@ -86,10 +87,7 @@ namespace TacticalBoard
                     line.Opacity = 1;
                 }
             }
-
-            //直線を消す
-
-
+            
             //ドラッグ関連
             if (null != thumb)
             {
@@ -450,6 +448,23 @@ namespace TacticalBoard
         {
             var Stamp = sender as Image;
             Stamp.Visibility = Visibility.Collapsed;
+        }
+
+        //インクのカラー設定
+        private void ColorButton(object sender, RoutedEventArgs e)
+        {
+            //現在のインクと入れ替えたりする
+            Button beforeInkButton = nowInkButton;
+            nowInkButton = sender as Button;
+            beforeInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+            nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+
+            //ボタンの背景色をインク色にする
+            SolidColorBrush colorBrush = nowInkButton.Background as SolidColorBrush;
+            inkCanvasLayer1.DefaultDrawingAttributes.Color = colorBrush.Color;
+            inkCanvasLayer2.DefaultDrawingAttributes.Color = colorBrush.Color;
+            inkCanvasLayer3.DefaultDrawingAttributes.Color = colorBrush.Color;
+            inkCanvasLayer4.DefaultDrawingAttributes.Color = colorBrush.Color;
         }
     }
 }
