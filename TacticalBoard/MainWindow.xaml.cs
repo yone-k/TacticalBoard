@@ -28,8 +28,9 @@ namespace TacticalBoard
         //現在選択中のコマの直線の名前
         String lineName;
 
-        //コマのリスト
+        //コマのリストとレイヤー
         List<Thumb> thumbs = new List<Thumb>();
+        String[] thumbsLayer = new string[10];
 
         //コマの初期配置座標リスト
         private PointCollection thumbDefaultPoints = new PointCollection();
@@ -49,8 +50,8 @@ namespace TacticalBoard
         //現在のレイヤーのスタンプ用キャンバス
         Canvas nowLayerStamp;
 
-        //現在のレイヤーのボタン
-        Button nowLayerButton;
+        //現在のレイヤー
+        String nowLayer = "Layer1";
 
 
         public MainWindow()
@@ -59,7 +60,9 @@ namespace TacticalBoard
 
             nowLayerInk = FindName("inkCanvasLayer1") as InkCanvas;
             nowLayerStamp = FindName("StampCanvasLayer1") as Canvas;
-            nowLayerButton = FindName("Layer1Button") as Button;
+            thumbsLayer = new string[]{
+                "Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1","Layer1"
+            };
         }
 
 
@@ -68,8 +71,26 @@ namespace TacticalBoard
         {
             var thumb = sender as Thumb;
             lineName = thumb.Name + "Line";
+            int i;
+
             Line line = PeaceCanvas.FindName(lineName) as Line;
             line.Visibility = Visibility.Collapsed;
+
+            //透過設定
+            for (i = 0; i <10; i++)
+            {
+                if (thumbs[i].Equals(thumb))
+                {
+                    thumbsLayer[i] = nowLayer;
+                    thumbs[i].Opacity = 1;
+                    line.Opacity = 1;
+                }
+            }
+
+            //直線を消す
+
+
+            //ドラッグ関連
             if (null != thumb)
             {
                 var border = thumb.Template.FindName("Thumb_Border", thumb) as Border;
@@ -219,6 +240,9 @@ namespace TacticalBoard
                 lineName = thumbs[i].Name + "Line";
                 line = PeaceCanvas.FindName(lineName) as Line;
                 line.Visibility = Visibility.Collapsed;
+                thumbsLayer[i] = nowLayer;
+                thumbs[i].Opacity = 1;
+                line.Opacity = 1;
             }
 
             //インクのリセット
@@ -380,13 +404,14 @@ namespace TacticalBoard
         private void layerButtonClick(object sender, RoutedEventArgs e)
         {
             //現在のレイヤー関連を保持
-            Button beforeLayerButton = nowLayerButton;
+            Button beforeLayerButton = FindName(nowLayer + "Button") as Button;
             InkCanvas beforeLayerInk = nowLayerInk;
             Canvas beforeLayerStamp = nowLayerStamp;
 
             //クリックされたレイヤー情報
-            nowLayerButton = sender as Button;
+            Button nowLayerButton = sender as Button;
             String clickedLayer = nowLayerButton.Content.ToString();
+            nowLayer = clickedLayer;
             nowLayerInk = FindName("inkCanvas" + clickedLayer) as InkCanvas;
             nowLayerStamp = FindName("StampCanvas" + clickedLayer) as Canvas;
 
@@ -400,6 +425,24 @@ namespace TacticalBoard
             beforeLayerStamp.Visibility = Visibility.Collapsed;
             nowLayerButton.IsEnabled = false;
             beforeLayerButton.IsEnabled = true;
+
+            //コマの透過関連
+            int i;
+            Line line;
+            for (i = 0; i < 10; i++)
+            {
+                line = FindName(thumbs[i].Name + "Line") as Line;
+                if (thumbsLayer[i].Equals(nowLayer))
+                {
+                    thumbs[i].Opacity = 1;
+                    line.Opacity = 1;
+                }
+                else
+                {
+                    thumbs[i].Opacity = 0.4;
+                    line.Opacity = 0.4;
+                }
+            }
         }
 
         //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
