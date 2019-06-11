@@ -43,13 +43,23 @@ namespace TacticalBoard
         //スタンプリストのIndex
         int stampIndex = 0;
 
-        //現在のレイヤー
-        String nowLayer = "Layer1";
+        //現在のレイヤーのインクキャンバス
+        InkCanvas nowLayerInk;
+
+        //現在のレイヤーのスタンプ用キャンバス
+        Canvas nowLayerStamp;
+
+        //現在のレイヤーのボタン
+        Button nowLayerButton;
+
 
         public MainWindow()
         {
             InitializeComponent();
 
+            nowLayerInk = FindName("inkCanvasLayer1") as InkCanvas;
+            nowLayerStamp = FindName("StampCanvasLayer1") as Canvas;
+            nowLayerButton = FindName("Layer1Button") as Button;
         }
 
 
@@ -122,7 +132,7 @@ namespace TacticalBoard
                 ImageBrush ib = new ImageBrush();
                 ib.ImageSource = new BitmapImage(new Uri(dialog.FileName, UriKind.Relative));
                 ib.Stretch = Stretch.Uniform;
-                inkCanvasLayer1.Background = ib;
+                nowLayerInk.Background = ib;
             }
         }
 
@@ -131,7 +141,7 @@ namespace TacticalBoard
         {
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
-            inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             var Thumb = sender as Thumb;
             Point thumbPoint = Thumb.TranslatePoint(new Point(0, 0), PeaceCanvas);
             Point mousePoint = Mouse.GetPosition(PeaceCanvas);
@@ -199,9 +209,9 @@ namespace TacticalBoard
             //ボタン周りのリセット
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
-            inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
-            //インクのリセット
+            //コマのリセット
             for (i = 0; i < 10; i++)
             {
                 Canvas.SetLeft(thumbs[i], thumbDefaultPoints[i].X);
@@ -209,9 +219,13 @@ namespace TacticalBoard
                 lineName = thumbs[i].Name + "Line";
                 line = PeaceCanvas.FindName(lineName) as Line;
                 line.Visibility = Visibility.Collapsed;
-                inkCanvasLayer1.Strokes.Clear();
-
             }
+
+            //インクのリセット
+            inkCanvasLayer1.Strokes.Clear();
+            inkCanvasLayer2.Strokes.Clear();
+            inkCanvasLayer3.Strokes.Clear();
+            inkCanvasLayer4.Strokes.Clear();
 
             //スタンプのリセット
             for (; stampIndex > 0; stampIndex--)
@@ -240,12 +254,12 @@ namespace TacticalBoard
             if (PenButton.IsChecked == true)
             {
                 EraseButton.IsChecked = false;
-                inkCanvasLayer1.EditingMode = InkCanvasEditingMode.Ink;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
             }
             else
             {
                 EraseButton.IsChecked = false;
-                inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             }
 
         }
@@ -260,17 +274,17 @@ namespace TacticalBoard
 
             if (EraseButton.IsChecked == true)
             {
-                inkCanvasLayer1.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
             }
             else
             {
                 if (PenButton.IsChecked == true)
                 {
-                    inkCanvasLayer1.EditingMode = InkCanvasEditingMode.Ink;
+                    nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
                 }
                 else
                 {
-                    inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+                    nowLayerInk.EditingMode = InkCanvasEditingMode.None;
                 }
             }
         }
@@ -292,7 +306,7 @@ namespace TacticalBoard
             //ペン関係をオフにする
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
-            inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
             //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/frag.png", UriKind.Relative));
@@ -304,13 +318,13 @@ namespace TacticalBoard
 
             //右クリックで削除できるようにイベントハンドラを用意する
             frag.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(inkCanvasLayer1);
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
 
             //マウスカーソルの位置に画像をセットする
             frag.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
             //スタンプを配置
-            StampCanvasLayer1.Children.Add(frag);
+            nowLayerStamp.Children.Add(frag);
             stampImages.Add(frag);
         }
 
@@ -320,7 +334,7 @@ namespace TacticalBoard
             //ペン関係をオフにする
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
-            inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
             //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/smoke.png", UriKind.Relative));
@@ -332,13 +346,13 @@ namespace TacticalBoard
 
             //右クリックで削除できるようにイベントハンドラを用意する
             smoke.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(inkCanvasLayer1);
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
 
             //マウスカーソルの位置に画像をセットする
             smoke.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
             //スタンプを配置
-            StampCanvasLayer1.Children.Add(smoke);
+            nowLayerStamp.Children.Add(smoke);
             stampImages.Add(smoke);
         }
 
@@ -348,7 +362,7 @@ namespace TacticalBoard
             //ペン関係をオフにする
             PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
-            inkCanvasLayer1.EditingMode = InkCanvasEditingMode.None;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
             //元画像読み込み
             BitmapImage image = new BitmapImage(new Uri("Resources/stun.png", UriKind.Relative));
@@ -360,13 +374,13 @@ namespace TacticalBoard
 
             //右クリックで削除できるようにイベントハンドラを用意する
             stun.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(inkCanvasLayer1);
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
 
             //マウスカーソルの位置に画像をセットする
             stun.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
             //スタンプを配置
-            StampCanvasLayer1.Children.Add(stun);
+            nowLayerStamp.Children.Add(stun);
             stampImages.Add(stun);
         }
 
@@ -390,13 +404,13 @@ namespace TacticalBoard
                 
                 //右クリックで削除できるようにイベントハンドラを用意する
                 stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-                Point mousePoint = Mouse.GetPosition(inkCanvasLayer1);
+                Point mousePoint = Mouse.GetPosition(nowLayerInk);
 
                 //マウスカーソルの位置に画像をセットする
                 stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
                 //スタンプを配置
-                StampCanvasLayer1.Children.Add(stamp);
+                nowLayerStamp.Children.Add(stamp);
                 stampImages.Add(stamp);
             }
         }
@@ -405,24 +419,27 @@ namespace TacticalBoard
         //レイヤー関連
         private void layerButtonClick(object sender, RoutedEventArgs e)
         {
+            //現在のレイヤー関連を保持
+            Button beforeLayerButton = nowLayerButton;
+            InkCanvas beforeLayerInk = nowLayerInk;
+            Canvas beforeLayerStamp = nowLayerStamp;
 
-            Button clickedLayerButton = sender as Button;
-            String clickedLayer = clickedLayerButton.Content.ToString();
-            Button beforeLayerButton = FindName(clickedLayer + "Button") as Button;
-            InkCanvas nextLayerInk = FindName("inkCanvas" + clickedLayer) as InkCanvas;
-            Canvas nextLayerStamp = FindName("StampCanvas" + clickedLayer) as Canvas;
-            InkCanvas beforeLayerInk = FindName("inkCanvas" + nowLayer) as InkCanvas;
-            Canvas beforeLayerStamp = FindName("StampCanvas" + nowLayer) as Canvas;
+            //クリックされたレイヤー情報
+            nowLayerButton = sender as Button;
+            String clickedLayer = nowLayerButton.Content.ToString();
+            nowLayerInk = FindName("inkCanvas" + clickedLayer) as InkCanvas;
+            nowLayerStamp = FindName("StampCanvas" + clickedLayer) as Canvas;
 
-            nextLayerInk.Visibility = Visibility.Visible;
-            nextLayerStamp.Visibility = Visibility.Visible;
+            //表示系の切り替え
+            nowLayerInk.Visibility = Visibility.Visible;
+            nowLayerStamp.Visibility = Visibility.Visible;
             beforeLayerInk.Visibility = Visibility.Collapsed;
+            beforeLayerInk.EditingMode = InkCanvasEditingMode.None;
+            PenButton.IsChecked = false;
+            EraseButton.IsChecked = false;
             beforeLayerStamp.Visibility = Visibility.Collapsed;
-
-            clickedLayerButton.IsEnabled = false;
+            nowLayerButton.IsEnabled = false;
             beforeLayerButton.IsEnabled = true;
-
-            nowLayer = clickedLayer;
         }
 
         //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
