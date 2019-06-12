@@ -335,9 +335,9 @@ namespace TacticalBoard
 
             //右クリックで削除できるようにイベントハンドラを用意する
             stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
-            Point mousePoint = Mouse.GetPosition(nowLayerInk);
 
             //マウスカーソルの位置に画像をセットする
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
             stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
 
             //スタンプを配置
@@ -386,6 +386,9 @@ namespace TacticalBoard
         {
             // ダイアログのインスタンスを生成
             var dialog = new OpenFileDialog();
+
+            //初期ディレクトリを
+            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])),"stamps");
 
             // ファイルの種類を設定
             dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
