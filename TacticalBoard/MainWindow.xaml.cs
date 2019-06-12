@@ -142,6 +142,10 @@ namespace TacticalBoard
             // ダイアログのインスタンスを生成
             var dialog = new OpenFileDialog();
 
+            //初期ディレクトリを設定
+            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "maps");
+
+
             // ファイルの種類を設定
             dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
 
@@ -387,7 +391,7 @@ namespace TacticalBoard
             // ダイアログのインスタンスを生成
             var dialog = new OpenFileDialog();
 
-            //初期ディレクトリを
+            //初期ディレクトリを設定
             dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])),"stamps");
 
             // ファイルの種類を設定
