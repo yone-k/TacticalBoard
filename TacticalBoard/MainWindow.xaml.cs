@@ -87,7 +87,7 @@ namespace TacticalBoard
                     line.Opacity = 1;
                 }
             }
-            
+
             //ドラッグ関連
             if (null != thumb)
             {
@@ -162,7 +162,6 @@ namespace TacticalBoard
         //コマから右ドラッグで直線を引くためのメソッド(右クリック押し込み動作)
         private void ThumbRightDown(object sender, MouseButtonEventArgs e)
         {
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             var Thumb = sender as Thumb;
@@ -230,7 +229,6 @@ namespace TacticalBoard
             int i;
 
             //ボタン周りのリセット
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
@@ -269,27 +267,6 @@ namespace TacticalBoard
             thumbDefaultPoints.Add(thumb.TranslatePoint(new Point(0, 0), PeaceCanvas));
         }
 
-        //ペンモードの切り替え
-        private void PenButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (PenButton == null)
-            {
-                return;
-            }
-
-            if (PenButton.IsChecked == true)
-            {
-                EraseButton.IsChecked = false;
-                nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
-            }
-            else
-            {
-                EraseButton.IsChecked = false;
-                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
-            }
-
-        }
-
         //消しゴムモードの切替
         private void EraseChecked(object sender, RoutedEventArgs e)
         {
@@ -304,14 +281,7 @@ namespace TacticalBoard
             }
             else
             {
-                if (PenButton.IsChecked == true)
-                {
-                    nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
-                }
-                else
-                {
-                    nowLayerInk.EditingMode = InkCanvasEditingMode.None;
-                }
+                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             }
         }
 
@@ -353,7 +323,6 @@ namespace TacticalBoard
         private void fragButtonClick(object sender, RoutedEventArgs e)
         {
             //ペン関係をオフにする
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
@@ -365,7 +334,6 @@ namespace TacticalBoard
         private void smokeButtonClick(object sender, RoutedEventArgs e)
         {
             //ペン関係をオフにする
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
@@ -377,7 +345,6 @@ namespace TacticalBoard
         private void stunButtonClick(object sender, RoutedEventArgs e)
         {
             //ペン関係をオフにする
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
@@ -392,7 +359,7 @@ namespace TacticalBoard
             var dialog = new OpenFileDialog();
 
             //初期ディレクトリを設定
-            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])),"stamps");
+            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "stamps");
 
             // ファイルの種類を設定
             dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
@@ -425,7 +392,6 @@ namespace TacticalBoard
             nowLayerStamp.Visibility = Visibility.Visible;
             beforeLayerInk.Visibility = Visibility.Collapsed;
             beforeLayerInk.EditingMode = InkCanvasEditingMode.None;
-            PenButton.IsChecked = false;
             EraseButton.IsChecked = false;
             beforeLayerStamp.Visibility = Visibility.Collapsed;
             nowLayerButton.IsEnabled = false;
@@ -464,7 +430,17 @@ namespace TacticalBoard
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
             beforeInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
-            nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+
+            //同じボタンを押したらインクをオフ、それ以外ならインクモード
+            if (beforeInkButton.Background == nowInkButton.Background)
+            {
+                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            }
+            else
+            {
+                nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
+                nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+            }
 
             //ボタンの背景色をインク色にする
             SolidColorBrush colorBrush = nowInkButton.Background as SolidColorBrush;
