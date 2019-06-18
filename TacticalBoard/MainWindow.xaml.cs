@@ -279,15 +279,16 @@ namespace TacticalBoard
                 return;
             }
 
-            if (EraseButton.IsChecked == true)
-            {
-                nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
-                nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
-            }
-            else
-            {
-                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
-            }
+            EraseButton.IsChecked = true;
+            CMErase.IsChecked = true;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
+            nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+        }
+        private void EraseUnchecked(object sender, RoutedEventArgs e)
+        {
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            EraseButton.IsChecked = false;
+            CMErase.IsChecked = false;
         }
 
         //画面上でのクリック時の動作
@@ -435,6 +436,7 @@ namespace TacticalBoard
             //現在のインクと入れ替えたりする
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
+            CMPen.IsChecked = true;
 
             //インクモード時に同じボタンを押したらインクオフ、それ以外は押した色でインクモード
             if (nowInkButton.BorderBrush.ToString().Equals(Colors.Black.ToString()))
@@ -467,6 +469,7 @@ namespace TacticalBoard
             TextBlock stamp = new TextBlock();
 
             stamp.Text = StampText.Text;
+            stamp.FontSize = 14;
 
             //右クリックで削除できるようにイベントハンドラを用意する
             stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
@@ -481,6 +484,23 @@ namespace TacticalBoard
             //スタンプを配置
             nowLayerStamp.Children.Add(stamp);
             stampTextBlocks.Add(stamp);
+        }
+
+        //右クリックメニュー関連：ペン
+        private void MenuPenClick(object sender, RoutedEventArgs e)
+        {
+            if (CMPen.IsChecked == true)
+            {
+                EraseButton.IsChecked = false;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
+                nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
+            }
+            else
+            {
+                EraseButton.IsChecked = false;
+                nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+                nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+            }
         }
     }
 }
