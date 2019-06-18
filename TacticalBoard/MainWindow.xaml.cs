@@ -18,32 +18,32 @@ namespace TacticalBoard
     {
         //直線書いてる最中かどうかの判定
         bool IsDraw;
-
         //現在選択中のコマの直線の名前
         String lineName;
-
         //コマのリストとレイヤー
         List<Thumb> thumbs = new List<Thumb>();
         String[] thumbsLayer = new string[10];
-
         //コマの初期配置座標リスト
         private PointCollection thumbDefaultPoints = new PointCollection();
 
         //スタンプ押してる最中判定用
         bool IsStamp;
-
         //スタンプのリスト
         List<Image> stampImages = new List<Image>();
-
         //スタンプリストのIndex
         int stampIndex = 0;
 
+        //テキストスタンプ判定
+        bool IsTextStamp;
+        //文字列スタンプのリスト
+        List<TextBlock> stampTextBlocks = new List<TextBlock>();
+        //文字列スタンプのIndex
+        int sTBIndex = 0;
+
         //現在のレイヤーのインクキャンバス
         InkCanvas nowLayerInk;
-
         //現在のレイヤーのスタンプ用キャンバス
         Canvas nowLayerStamp;
-
         //現在のレイヤー
         String nowLayer = "Layer1";
 
@@ -207,6 +207,10 @@ namespace TacticalBoard
             {
                 stampImages[stampIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
             }
+            if (IsTextStamp)
+            {
+                stampTextBlocks[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            }
         }
 
         //thumbから右クリックを離した場合
@@ -278,6 +282,7 @@ namespace TacticalBoard
             if (EraseButton.IsChecked == true)
             {
                 nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
+                nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             }
             else
             {
@@ -289,10 +294,10 @@ namespace TacticalBoard
         private void peaceMouseClick(object sender, MouseButtonEventArgs e)
         {
             //スタンプ押す状態のとき
-            if (IsStamp)
+            if (IsStamp || IsTextStamp)
             {
                 IsStamp = false;
-
+                IsTextStamp = false;
             }
         }
 
@@ -392,6 +397,7 @@ namespace TacticalBoard
             nowLayerStamp.Visibility = Visibility.Visible;
             beforeLayerInk.Visibility = Visibility.Collapsed;
             beforeLayerInk.EditingMode = InkCanvasEditingMode.None;
+            nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             EraseButton.IsChecked = false;
             beforeLayerStamp.Visibility = Visibility.Collapsed;
             nowLayerButton.IsEnabled = false;
@@ -429,16 +435,18 @@ namespace TacticalBoard
             //現在のインクと入れ替えたりする
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
-            beforeInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
 
-            //同じボタンを押したらインクをオフ、それ以外ならインクモード
-            if (beforeInkButton.Background == nowInkButton.Background)
+            //インクモード時に同じボタンを押したらインクオフ、それ以外は押した色でインクモード
+            if (nowInkButton.BorderBrush.ToString().Equals(Colors.Black.ToString()))
             {
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+                nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             }
             else
             {
+                EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
+                beforeInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.Black);
             }
 
@@ -448,6 +456,31 @@ namespace TacticalBoard
             inkCanvasLayer2.DefaultDrawingAttributes.Color = colorBrush.Color;
             inkCanvasLayer3.DefaultDrawingAttributes.Color = colorBrush.Color;
             inkCanvasLayer4.DefaultDrawingAttributes.Color = colorBrush.Color;
+        }
+
+        private void TextButtonClick(object sender, RoutedEventArgs e)
+        {
+            //ペン関係をオフにする
+            EraseButton.IsChecked = false;
+            nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+
+            TextBlock stamp = new TextBlock();
+
+            stamp.Text = StampText.Text;
+
+            //右クリックで削除できるようにイベントハンドラを用意する
+            stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
+
+            //マウスカーソルの位置に画像をセットする
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
+            stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+
+            IsTextStamp = true;
+            sTBIndex++;
+
+            //スタンプを配置
+            nowLayerStamp.Children.Add(stamp);
+            stampTextBlocks.Add(stamp);
         }
     }
 }
