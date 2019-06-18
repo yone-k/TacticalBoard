@@ -1,9 +1,10 @@
-<Window x:Name="TacticalBoard" x:Class="TacticalBoard.MainWindow"
+<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TacticalBoard"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="TacticalBoard" x:Class="TacticalBoard.MainWindow"
         mc:Ignorable="d"
         Title="TacticalBoard" Height="717" Width="1280">
     <Grid Margin="0,0,0,-1">
@@ -11,6 +12,12 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid.ContextMenu >
+            <ContextMenu>
+                <MenuItem x:Name="CMPen" Header="ペン" IsCheckable="True" Click="MenuPenClick"/>
+                <MenuItem x:Name="CMErase" Header="消しゴム" IsCheckable="True" Checked="EraseChecked" Unchecked="EraseUnchecked"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
         <InkCanvas x:Name="inkCanvasLayer1"
             HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick">
             <InkCanvas.Background>
@@ -136,7 +143,7 @@
         </Canvas>
         <Button x:Name="MAPButton" Content="MAP" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="40" Click="MAPButton_Click"/>
         <Button x:Name="ResetButton" Content="Reset" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Width="39" Click="resetButton"/>
-        <ToggleButton x:Name="EraseButton" Content="Erase" HorizontalAlignment="Left" Margin="255,5,0,0" VerticalAlignment="Top" Width="38" Click="EraseChecked"/>
+        <ToggleButton x:Name="EraseButton" Content="Erase" HorizontalAlignment="Left" Margin="255,5,0,0" VerticalAlignment="Top" Width="38" Checked="EraseChecked" Unchecked="EraseUnchecked"/>
         <Button x:Name="FragButton" Content="Frag" HorizontalAlignment="Left" Margin="315,5,0,0" VerticalAlignment="Top" Width="40" Click="fragButtonClick"/>
         <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="355,5,0,0" VerticalAlignment="Top" Width="38" Click="smokeButtonClick"/>
         <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="393,5,0,0" VerticalAlignment="Top" Width="40" Click="stunButtonClick"/>
@@ -153,6 +160,6 @@
         <Button x:Name="PurpleInk" Content="✒" HorizontalAlignment="Left" Margin="175,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Magenta" Click="ColorButton"/>
         <Button x:Name="OrangeInk" Content="✒" HorizontalAlignment="Left" Margin="195,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Orange" Click="ColorButton"/>
         <Button x:Name="WhiteInk" Content="✒" HorizontalAlignment="Left" Margin="215,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="White" Click="ColorButton"/>
-        <Button x:Name="BlackInk" Content="✒" HorizontalAlignment="Left" Margin="235,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Black" Click="ColorButton" Foreground="White"/>
+        <Button x:Name="BlackInk" Content="✒" HorizontalAlignment="Left" Margin="235,5,0,0" VerticalAlignment="Top" Width="20" BorderBrush="LightGray" Background="Black" Click="ColorButton" Foreground="White" Height="20"/>
     </Grid>
 </Window>
