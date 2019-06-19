@@ -50,6 +50,8 @@ namespace TacticalBoard
         //現在のインク色
         Button nowInkButton;
 
+        List<MenuItem> CMItems = new List<MenuItem>();
+
 
         public MainWindow()
         {
@@ -140,21 +142,23 @@ namespace TacticalBoard
         private void MAPButton_Click(object sender, RoutedEventArgs e)
         {
             // ダイアログのインスタンスを生成
-            var dialog = new OpenFileDialog();
+            var dialog = new OpenFileDialog
+            {
 
-            //初期ディレクトリを設定
-            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "maps");
-
-
-            // ファイルの種類を設定
-            dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
+                //初期ディレクトリを設定
+                InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "maps"),
+                // ファイルの種類を設定
+                Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg"
+            };
 
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
             {
-                ImageBrush ib = new ImageBrush();
-                ib.ImageSource = new BitmapImage(new Uri(dialog.FileName, UriKind.Relative));
-                ib.Stretch = Stretch.Uniform;
+                ImageBrush ib = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri(dialog.FileName, UriKind.Relative)),
+                    Stretch = Stretch.Uniform
+                };
                 nowLayerInk.Background = ib;
             }
         }
@@ -280,7 +284,8 @@ namespace TacticalBoard
             }
 
             EraseButton.IsChecked = true;
-            CMErase.IsChecked = true;
+            CMItems[1].IsChecked = true;
+            CMItems[0].IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.EraseByStroke;
             nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
         }
@@ -288,7 +293,7 @@ namespace TacticalBoard
         {
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             EraseButton.IsChecked = false;
-            CMErase.IsChecked = false;
+            CMItems[1].IsChecked = false;
         }
 
         //画面上でのクリック時の動作
@@ -362,13 +367,13 @@ namespace TacticalBoard
         private void stampButtonClick(object sender, RoutedEventArgs e)
         {
             // ダイアログのインスタンスを生成
-            var dialog = new OpenFileDialog();
-
-            //初期ディレクトリを設定
-            dialog.InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "stamps");
-
-            // ファイルの種類を設定
-            dialog.Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg";
+            var dialog = new OpenFileDialog
+            {
+                //初期ディレクトリを設定
+                InitialDirectory = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(Environment.GetCommandLineArgs()[0])), "stamps"),
+                // ファイルの種類を設定
+                Filter = "イメージファイル (*.png, *.jpg)|*.png;*.jpg"
+            };
 
             // ダイアログを表示する
             if (dialog.ShowDialog() == true)
@@ -399,6 +404,8 @@ namespace TacticalBoard
             beforeLayerInk.Visibility = Visibility.Collapsed;
             beforeLayerInk.EditingMode = InkCanvasEditingMode.None;
             nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+            CMItems[0].IsChecked = false;
+            CMItems[1].IsChecked = false;
             EraseButton.IsChecked = false;
             beforeLayerStamp.Visibility = Visibility.Collapsed;
             nowLayerButton.IsEnabled = false;
@@ -436,13 +443,15 @@ namespace TacticalBoard
             //現在のインクと入れ替えたりする
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
-            CMPen.IsChecked = true;
+            CMItems[0].IsChecked = true;
+            
 
             //インクモード時に同じボタンを押したらインクオフ、それ以外は押した色でインクモード
             if (nowInkButton.BorderBrush.ToString().Equals(Colors.Black.ToString()))
             {
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
+                CMItems[0].IsChecked = false;
             }
             else
             {
@@ -466,10 +475,11 @@ namespace TacticalBoard
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
 
-            TextBlock stamp = new TextBlock();
-
-            stamp.Text = StampText.Text;
-            stamp.FontSize = 14;
+            TextBlock stamp = new TextBlock
+            {
+                Text = StampText.Text,
+                FontSize = 14
+            };
 
             //右クリックで削除できるようにイベントハンドラを用意する
             stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
@@ -489,7 +499,7 @@ namespace TacticalBoard
         //右クリックメニュー関連：ペン
         private void MenuPenClick(object sender, RoutedEventArgs e)
         {
-            if (CMPen.IsChecked == true)
+            if (CMItems[0].IsChecked == true)
             {
                 EraseButton.IsChecked = false;
                 nowLayerInk.EditingMode = InkCanvasEditingMode.Ink;
@@ -501,6 +511,11 @@ namespace TacticalBoard
                 nowLayerInk.EditingMode = InkCanvasEditingMode.None;
                 nowInkButton.BorderBrush = new SolidColorBrush(Colors.LightGray);
             }
+        }
+
+        private void MenuItemInitialized(object sender, EventArgs e)
+        {
+            CMItems.Add((MenuItem)sender);
         }
     }
 }
