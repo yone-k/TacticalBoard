@@ -7,20 +7,26 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Name="TacticalBoard" x:Class="TacticalBoard.MainWindow"
         mc:Ignorable="d"
         Title="TacticalBoard" Height="717" Width="1280">
-    <Grid Margin="0,0,0,-1">
+    <Window.Resources>
+        <ContextMenu x:Key="CMenu">
+            <MenuItem x:Name ="CMPen"  Header="ペン" IsCheckable="True" Click="MenuPenClick" Initialized="MenuItemInitialized"/>
+            <MenuItem x:Name="CMErase" Header="消しゴム" IsCheckable="True" Checked="EraseChecked" Unchecked="EraseUnchecked" Initialized="MenuItemInitialized"/>
+            <Separator/>
+            <MenuItem x:Name="CMFrag" Header="フラグ" Click="fragButtonClick" Initialized="MenuItemInitialized" />
+            <MenuItem x:Name="CMsmoke" Header="スモーク" Click="smokeButtonClick" Initialized="MenuItemInitialized" />
+            <MenuItem x:Name="CMstun" Header="フラッシュ" Click="stunButtonClick" Initialized="MenuItemInitialized" />
+            <Separator/>
+            <MenuItem x:Name="CMReset" Header="リセット" Click="resetButton" Initialized="MenuItemInitialized"/>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid Margin="0,0,0,-1" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ContextMenu >
-            <ContextMenu>
-                <MenuItem x:Name="CMPen" Header="ペン" IsCheckable="True" Click="MenuPenClick"/>
-                <MenuItem x:Name="CMErase" Header="消しゴム" IsCheckable="True" Checked="EraseChecked" Unchecked="EraseUnchecked"/>
-            </ContextMenu>
-        </Grid.ContextMenu>
         <InkCanvas x:Name="inkCanvasLayer1"
-            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick">
-            <InkCanvas.Background>
+            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" ContextMenu="{StaticResource CMenu}">
+                <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
             <InkCanvas.DefaultDrawingAttributes>
@@ -29,7 +35,7 @@
         </InkCanvas>
         <Canvas x:Name="StampCanvasLayer1" Margin="0" Grid.Row="1" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" MouseRightButtonUp="peaceMouseRightUp"/>
         <InkCanvas x:Name="inkCanvasLayer2"
-            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Visibility="Collapsed">
+            HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" Margin="0,10,0,0" EditingMode="None" MinWidth="0" MinHeight="0" Grid.Row="1" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Visibility="Collapsed" ContextMenu="{StaticResource CMenu}">
             <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
@@ -39,7 +45,7 @@
         </InkCanvas>
         <Canvas x:Name="StampCanvasLayer2" Margin="0" Grid.Row="1" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" MouseRightButtonUp="peaceMouseRightUp" Visibility="Collapsed"/>
         <InkCanvas x:Name="inkCanvasLayer3"
-                HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" EditingMode="None" MinWidth="0" MinHeight="0" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Margin="0,10,0,0" Grid.Row="1" Visibility="Collapsed">
+                HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" EditingMode="None" MinWidth="0" MinHeight="0" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Margin="0,10,0,0" Grid.Row="1" Visibility="Collapsed" ContextMenu="{StaticResource CMenu}">
             <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
@@ -49,7 +55,7 @@
         </InkCanvas>
         <Canvas x:Name="StampCanvasLayer3" Margin="0" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" MouseRightButtonUp="peaceMouseRightUp" Grid.Row="1" Visibility="Collapsed"/>
         <InkCanvas x:Name="inkCanvasLayer4"
-                HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" EditingMode="None" MinWidth="0" MinHeight="0" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Margin="0,10,0,0" Grid.Row="1" Visibility="Collapsed">
+                HorizontalAlignment="Stretch" RenderTransformOrigin="0.5,0.5" EditingMode="None" MinWidth="0" MinHeight="0" MouseRightButtonUp="peaceMouseRightUp" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" Margin="0,10,0,0" Grid.Row="1" Visibility="Collapsed" ContextMenu="{StaticResource CMenu}">
             <InkCanvas.Background>
                 <ImageBrush Stretch="Uniform"/>
             </InkCanvas.Background>
@@ -60,6 +66,7 @@
         <Canvas x:Name="StampCanvasLayer4" Margin="0" MouseMove="peaceMouseMove" MouseLeftButtonDown="peaceMouseClick" MouseRightButtonUp="peaceMouseRightUp" Grid.Row="1" Visibility="Collapsed"/>
 
         <Canvas x:Name="PeaceCanvas" Margin="0" Grid.Row="1" MinWidth="600" MinHeight="400" MouseMove="peaceMouseMove" MouseRightButtonUp="peaceMouseRightUp" OpacityMask="Red">
+
             <Line x:Name="red1Line" StrokeThickness="4" Fill="#FFF4F4F5" Stroke="Red"/>
             <Line x:Name="red2Line" Stroke="Red" StrokeThickness="4" Fill="#FFF4F4F5"/>
             <Line x:Name="red3Line" Stroke="Red" StrokeThickness="4" Fill="#FFF4F4F5"/>
