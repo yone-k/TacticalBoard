@@ -66,8 +66,7 @@ namespace TacticalBoard
             };
 
         }
-
-
+        
         //Thumbドラッグ開始
         private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
@@ -214,6 +213,10 @@ namespace TacticalBoard
             if (IsTextStamp)
             {
                 stampTextBlocks[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+                stampTextBlocks[sTBIndex - 2].Margin = new Thickness(mousePoint.X + 2, mousePoint.Y, 0, 0);
+                stampTextBlocks[sTBIndex - 3].Margin = new Thickness(mousePoint.X - 2, mousePoint.Y, 0, 0);
+                stampTextBlocks[sTBIndex - 4].Margin = new Thickness(mousePoint.X, mousePoint.Y + 2, 0, 0);
+                stampTextBlocks[sTBIndex - 5].Margin = new Thickness(mousePoint.X, mousePoint.Y - 2, 0, 0);
             }
         }
 
@@ -319,7 +322,7 @@ namespace TacticalBoard
             stampIndex++;
 
             //右クリックで削除できるようにイベントハンドラを用意する
-            stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
+            stamp.MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
 
             //マウスカーソルの位置に画像をセットする
             Point mousePoint = Mouse.GetPosition(nowLayerInk);
@@ -433,8 +436,16 @@ namespace TacticalBoard
         //スタンプを右クリックしたときの動作(右クリックしたスタンプを消す)
         private void StampClear(object sender, RoutedEventArgs e)
         {
-            var Stamp = sender as Image;
-            Stamp.Visibility = Visibility.Collapsed;
+            try
+            {
+                var Stamp = sender as Image;
+                Stamp.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception)
+            {
+                var Stamp = sender as TextBlock;
+                Stamp.Visibility = Visibility.Collapsed;
+            }
         }
 
         //インクのカラー設定
@@ -474,26 +485,45 @@ namespace TacticalBoard
             //ペン関係をオフにする
             EraseButton.IsChecked = false;
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
+            int i;
 
-            TextBlock stamp = new TextBlock
-            {
-                Text = StampText.Text,
-                FontSize = 14
-            };
+            for (i = 0; i < 5; i ++) {
+                stampTextBlocks.Add
+                    (new TextBlock
+                    {
+                        Text = StampText.Text,
+                        Foreground = new SolidColorBrush(Colors.White),
+                        FontSize = 14
+                    }
+                    );
 
-            //右クリックで削除できるようにイベントハンドラを用意する
-            stamp.MouseRightButtonDown += new MouseButtonEventHandler(StampClear);
+                //右クリックで削除できるようにイベントハンドラを用意する
+                stampTextBlocks[sTBIndex].MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
+                sTBIndex++;
+            }
+
+            //一番表の文字だけ赤色、残りは白色で縁取り
+            stampTextBlocks[sTBIndex - 1].Foreground = new SolidColorBrush(Colors.Red);
 
             //マウスカーソルの位置に画像をセットする
             Point mousePoint = Mouse.GetPosition(nowLayerInk);
-            stamp.Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            GroupBox group = new GroupBox();
 
-            IsTextStamp = true;
-            sTBIndex++;
+            nowLayerStamp.Children.Add(group);
+
+            
+            stampTextBlocks[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
+            stampTextBlocks[sTBIndex - 2].Margin = new Thickness(mousePoint.X + 2, mousePoint.Y, 0, 0);
+            stampTextBlocks[sTBIndex - 3].Margin = new Thickness(mousePoint.X - 2, mousePoint.Y, 0, 0);
+            stampTextBlocks[sTBIndex - 4].Margin = new Thickness(mousePoint.X, mousePoint.Y + 2, 0, 0);
+            stampTextBlocks[sTBIndex - 5].Margin = new Thickness(mousePoint.X, mousePoint.Y - 2, 0, 0);
 
             //スタンプを配置
-            nowLayerStamp.Children.Add(stamp);
-            stampTextBlocks.Add(stamp);
+            for (; i > 0; i--) {
+                nowLayerStamp.Children.Add(stampTextBlocks[sTBIndex - i]);
+            }
+
+            IsTextStamp = true;
         }
 
         //右クリックメニュー関連：ペン
