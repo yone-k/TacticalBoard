@@ -155,7 +155,7 @@
         <Button x:Name="SmokeButton" Content="Smoke" HorizontalAlignment="Left" Margin="355,5,0,0" VerticalAlignment="Top" Width="38" Click="smokeButtonClick"/>
         <Button x:Name="StunButton" Content="Stun" HorizontalAlignment="Left" Margin="393,5,0,0" VerticalAlignment="Top" Width="40" Click="stunButtonClick"/>
         <Button x:Name="StampButton" Content="Stamp" HorizontalAlignment="Left" Margin="433,5,0,0" VerticalAlignment="Top" Width="38" Click="stampButtonClick"/>
-        <TextBox x:Name="StampText" HorizontalAlignment="Left" Height="20" Margin="473,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202"/>
+        <TextBox x:Name="StampText" HorizontalAlignment="Left" Height="20" Margin="473,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="202" Foreground="Black"/>
         <Button x:Name="TextButton" Content="Text" Margin="675,5,0,5" Click="TextButtonClick" HorizontalAlignment="Left" Width="43"/>
         <Button x:Name="Layer1Button" Content="Layer1" HorizontalAlignment="Left" Margin="806,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick" IsEnabled="False"/>
         <Button x:Name="Layer2Button" Content="Layer2" HorizontalAlignment="Left" Margin="844,5,0,0" VerticalAlignment="Top" Width="38" Click="layerButtonClick"/>
