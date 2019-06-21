@@ -36,7 +36,7 @@ namespace TacticalBoard
         //テキストスタンプ判定
         bool IsTextStamp;
         //文字列スタンプのリスト
-        List<TextBlock> stampTextBlocks = new List<TextBlock>();
+        List<Canvas> TextStampCanvas = new List<Canvas>();
         //文字列スタンプのIndex
         int sTBIndex = 0;
 
@@ -50,6 +50,7 @@ namespace TacticalBoard
         //現在のインク色
         Button nowInkButton;
 
+        //メニュー項目用
         List<MenuItem> CMItems = new List<MenuItem>();
 
 
@@ -88,34 +89,10 @@ namespace TacticalBoard
                     line.Opacity = 1;
                 }
             }
-
-            //ドラッグ関連
-            if (null != thumb)
-            {
-                var border = thumb.Template.FindName("Thumb_Border", thumb) as Border;
-                if (null != border)
-                {
-                    border.BorderThickness = new Thickness(1);
-                }
-            }
-        }
-
-        //Thumbドラッグ終了
-        private void Thumb_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
-        {
-            var thumb = sender as Thumb;
-            if (null != thumb)
-            {
-                var border = thumb.Template.FindName("Thumb_Border", thumb) as Border;
-                if (null != border)
-                {
-                    border.BorderThickness = new Thickness(0);
-                }
-            }
         }
 
         //Thumbドラッグ中
-        private void Thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
             var thumb = sender as Thumb;
             if (null != thumb)
@@ -212,11 +189,7 @@ namespace TacticalBoard
             }
             if (IsTextStamp)
             {
-                stampTextBlocks[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-                stampTextBlocks[sTBIndex - 2].Margin = new Thickness(mousePoint.X + 2, mousePoint.Y, 0, 0);
-                stampTextBlocks[sTBIndex - 3].Margin = new Thickness(mousePoint.X - 2, mousePoint.Y, 0, 0);
-                stampTextBlocks[sTBIndex - 4].Margin = new Thickness(mousePoint.X, mousePoint.Y + 2, 0, 0);
-                stampTextBlocks[sTBIndex - 5].Margin = new Thickness(mousePoint.X, mousePoint.Y - 2, 0, 0);
+                TextStampCanvas[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
             }
         }
 
@@ -267,6 +240,11 @@ namespace TacticalBoard
             {
                 stampImages[stampIndex - 1].Visibility = Visibility.Collapsed;
             }
+            for (; sTBIndex > 0; sTBIndex--)
+            {
+                TextStampCanvas[sTBIndex - 1].Visibility = Visibility.Collapsed;
+            }
+            TextStampCanvas.Clear();
             stampImages.Clear();
         }
 
@@ -444,7 +422,8 @@ namespace TacticalBoard
             catch (Exception)
             {
                 var Stamp = sender as TextBlock;
-                Stamp.Visibility = Visibility.Collapsed;
+                var textcanvas = Stamp.Parent as Canvas;
+                textcanvas.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -487,42 +466,51 @@ namespace TacticalBoard
             nowLayerInk.EditingMode = InkCanvasEditingMode.None;
             int i;
 
-            for (i = 0; i < 5; i ++) {
+
+            TextStampCanvas.Add(new Canvas());
+
+            Point mousePoint = Mouse.GetPosition(nowLayerInk);
+
+            List<TextBlock> stampTextBlocks = new List<TextBlock>();
+            TextStampCanvas.Add(new Canvas
+            {
+                VerticalAlignment = VerticalAlignment.Top,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0)
+            }
+            );
+
+            for (i = 0; i < 5; i++)
+            {
                 stampTextBlocks.Add
                     (new TextBlock
                     {
                         Text = StampText.Text,
                         Foreground = new SolidColorBrush(Colors.White),
-                        FontSize = 14
+                        FontSize = 18,
                     }
                     );
 
                 //右クリックで削除できるようにイベントハンドラを用意する
-                stampTextBlocks[sTBIndex].MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
-                sTBIndex++;
+                stampTextBlocks[i].MouseRightButtonUp += new MouseButtonEventHandler(StampClear);
             }
 
             //一番表の文字だけ赤色、残りは白色で縁取り
-            stampTextBlocks[sTBIndex - 1].Foreground = new SolidColorBrush(Colors.Red);
+            stampTextBlocks[0].Foreground = new SolidColorBrush(Colors.Red);
 
             //マウスカーソルの位置に画像をセットする
-            Point mousePoint = Mouse.GetPosition(nowLayerInk);
-            GroupBox group = new GroupBox();
-
-            nowLayerStamp.Children.Add(group);
-
-            
-            stampTextBlocks[sTBIndex - 1].Margin = new Thickness(mousePoint.X, mousePoint.Y, 0, 0);
-            stampTextBlocks[sTBIndex - 2].Margin = new Thickness(mousePoint.X + 2, mousePoint.Y, 0, 0);
-            stampTextBlocks[sTBIndex - 3].Margin = new Thickness(mousePoint.X - 2, mousePoint.Y, 0, 0);
-            stampTextBlocks[sTBIndex - 4].Margin = new Thickness(mousePoint.X, mousePoint.Y + 2, 0, 0);
-            stampTextBlocks[sTBIndex - 5].Margin = new Thickness(mousePoint.X, mousePoint.Y - 2, 0, 0);
+            stampTextBlocks[1].Margin = new Thickness(1, 0, 0, 0);
+            stampTextBlocks[2].Margin = new Thickness(-1, 0, 0, 0);
+            stampTextBlocks[3].Margin = new Thickness(0, 1, 0, 0);
+            stampTextBlocks[4].Margin = new Thickness(0, -1, 0, 0);
 
             //スタンプを配置
             for (; i > 0; i--) {
-                nowLayerStamp.Children.Add(stampTextBlocks[sTBIndex - i]);
+                TextStampCanvas[sTBIndex].Children.Add(stampTextBlocks[i - 1]);
             }
+            nowLayerStamp.Children.Add(TextStampCanvas[sTBIndex]);
 
+            sTBIndex++;
             IsTextStamp = true;
         }
 
@@ -543,6 +531,7 @@ namespace TacticalBoard
             }
         }
 
+        //メニュー項目初期化時にリスト化
         private void MenuItemInitialized(object sender, EventArgs e)
         {
             CMItems.Add((MenuItem)sender);
