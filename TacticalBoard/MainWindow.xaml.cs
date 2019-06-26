@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -67,17 +68,26 @@ namespace TacticalBoard
             };
 
         }
-        
+
         //Thumbドラッグ開始
         private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             var thumb = sender as Thumb;
             lineName = thumb.Name + "Line";
             int i;
+            thumb.Opacity = 1;
 
-            //直線を消す
-            Line line = PeaceCanvas.FindName(lineName) as Line;
-            line.Visibility = Visibility.Collapsed;
+            try
+            {
+                //直線を消す
+                Line line = PeaceCanvas.FindName(lineName) as Line;
+                line.Visibility = Visibility.Collapsed;
+                line.Opacity = 1;
+            }
+            catch (Exception)
+            {
+
+            }
 
             //透過設定
             for (i = 0; i < 10; i++)
@@ -85,8 +95,6 @@ namespace TacticalBoard
                 if (thumbs[i].Equals(thumb))
                 {
                     thumbsLayer[i] = nowLayer;
-                    thumbs[i].Opacity = 1;
-                    line.Opacity = 1;
                 }
             }
         }
@@ -434,7 +442,7 @@ namespace TacticalBoard
             Button beforeInkButton = nowInkButton;
             nowInkButton = sender as Button;
             CMItems[0].IsChecked = true;
-            
+
 
             //インクモード時に同じボタンを押したらインクオフ、それ以外は押した色でインクモード
             if (nowInkButton.BorderBrush.ToString().Equals(Colors.Black.ToString()))
@@ -535,6 +543,38 @@ namespace TacticalBoard
         private void MenuItemInitialized(object sender, EventArgs e)
         {
             CMItems.Add((MenuItem)sender);
+        }
+
+        private void ThumbDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Thumb thumb = sender as Thumb;
+            Thumb nextthumb = FindName(thumb.Name + "_dead") as Thumb;
+            Canvas.SetLeft(nextthumb, Canvas.GetLeft(thumb));
+            Canvas.SetTop(nextthumb, Canvas.GetLeft(thumb));
+            thumb.Visibility = Visibility.Collapsed;
+            nextthumb.Visibility = Visibility.Visible;
+        }
+
+        private void ThumbDeadDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Thumb thumb = sender as Thumb;
+            String[] split = thumb.Name.Split('_');
+            Thumb nextthumb = FindName(split[0]) as Thumb;
+            var x = Canvas.GetLeft(thumb) + e.HorizontalChange;
+            var y = Canvas.GetTop(thumb) + e.VerticalChange;
+
+            var canvas = thumb.Parent as Canvas;
+            if (null != canvas)
+            {
+                x = Math.Max(x, 0);
+                y = Math.Max(y, 0);
+                x = Math.Min(x, canvas.ActualWidth - thumb.ActualWidth);
+                y = Math.Min(y, canvas.ActualHeight - thumb.ActualHeight);
+            }
+            Canvas.SetLeft(nextthumb, x);
+            Canvas.SetTop(nextthumb, y);
+            thumb.Visibility = Visibility.Collapsed;
+            nextthumb.Visibility = Visibility.Visible;
         }
     }
 }
