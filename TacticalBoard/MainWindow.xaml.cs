@@ -70,7 +70,7 @@ namespace TacticalBoard
         }
 
         //Thumbドラッグ開始
-        private void Thumb_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        private void Thumb_DragStarted(object sender, DragStartedEventArgs e)
         {
             var thumb = sender as Thumb;
             lineName = thumb.Name + "Line";
@@ -102,9 +102,20 @@ namespace TacticalBoard
         //Thumbドラッグ中
         private void Thumb_DragDelta(object sender, DragDeltaEventArgs e)
         {
-            var thumb = sender as Thumb;
-            if (null != thumb)
+            if (sender is Thumb thumb)
             {
+                string[] split = thumb.Name.Split('_');
+                Thumb hiddenthumb;
+
+                if (split.Length > 1) 
+                {
+                    hiddenthumb = FindName(split[0] ) as Thumb;
+                }
+                else
+                {
+                    hiddenthumb = FindName(split[0] + "_dead") as Thumb;
+                }
+
                 var x = Canvas.GetLeft(thumb) + e.HorizontalChange;
                 var y = Canvas.GetTop(thumb) + e.VerticalChange;
 
@@ -119,6 +130,8 @@ namespace TacticalBoard
 
                 Canvas.SetLeft(thumb, x);
                 Canvas.SetTop(thumb, y);
+                Canvas.SetLeft(hiddenthumb, x);
+                Canvas.SetTop(hiddenthumb, y);
             }
         }
 
@@ -549,8 +562,6 @@ namespace TacticalBoard
         {
             Thumb thumb = sender as Thumb;
             Thumb nextthumb = FindName(thumb.Name + "_dead") as Thumb;
-            Canvas.SetLeft(nextthumb, Canvas.GetLeft(thumb));
-            Canvas.SetTop(nextthumb, Canvas.GetLeft(thumb));
             thumb.Visibility = Visibility.Collapsed;
             nextthumb.Visibility = Visibility.Visible;
         }
@@ -560,19 +571,6 @@ namespace TacticalBoard
             Thumb thumb = sender as Thumb;
             String[] split = thumb.Name.Split('_');
             Thumb nextthumb = FindName(split[0]) as Thumb;
-            var x = Canvas.GetLeft(thumb) + e.HorizontalChange;
-            var y = Canvas.GetTop(thumb) + e.VerticalChange;
-
-            var canvas = thumb.Parent as Canvas;
-            if (null != canvas)
-            {
-                x = Math.Max(x, 0);
-                y = Math.Max(y, 0);
-                x = Math.Min(x, canvas.ActualWidth - thumb.ActualWidth);
-                y = Math.Min(y, canvas.ActualHeight - thumb.ActualHeight);
-            }
-            Canvas.SetLeft(nextthumb, x);
-            Canvas.SetTop(nextthumb, y);
             thumb.Visibility = Visibility.Collapsed;
             nextthumb.Visibility = Visibility.Visible;
         }
